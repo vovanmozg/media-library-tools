@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  media_tools:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vovan/media_tools
+    container_name: media_tools
+
