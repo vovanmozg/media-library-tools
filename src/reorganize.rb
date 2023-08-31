@@ -30,6 +30,7 @@ require './lib/reorganize/process_full_dups'
 require './lib/reorganize/process_similar'
 require './lib/reorganize/skip_files'
 require './lib/reorganize/to_cmds'
+require './lib/reorganize/to_cmds_json'
 require './lib/utils'
 
 # For determine type of file
@@ -57,11 +58,17 @@ class Reorganizer
     # здесь можем делать с $existing_data и $new_data что хотим
 
     actions, errors = find_dups(existing_data, new_data)
+    ToCmdsJson.new(dirs: @dirs, system: @system).process(
+      actions_groups: actions,
+      errors: errors
+    )
     cmds += ToCmds.new(dirs: @dirs, system: @system).process(
       actions_groups: actions,
       errors: errors
     )
 
+    write_actions_file(actions)
+    write_errors_file(errors)
     write_commands_file(cmds)
     cmds
   end
@@ -77,6 +84,20 @@ class Reorganizer
     IO.write(
       File.join(@dirs[:dups_dir], "#{@output_commands_file}.utf8"),
       cmds.join("\n")
+    )
+  end
+
+  def write_actions_file(actions)
+    IO.write(
+      File.join(@dirs[:dups_dir], 'actions.json'),
+      JSON.pretty_generate(actions)
+    )
+  end
+
+  def write_errors_file(errors)
+    IO.write(
+      File.join(@dirs[:dups_dir], 'errors.json'),
+      JSON.pretty_generate(errors)
     )
   end
 
