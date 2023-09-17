@@ -47,13 +47,14 @@ class Reorganizer
     @system = system
     @use_cache = use_cache
     @output_commands_file = @system == 'linux' ? 'commands.sh.txt' : 'commands.bat.txt'
-    @media = Media.new(dirs[:cache_dir], LOG)
+    @media = Media.new(dirs[:data_dir], LOG)
     @errors = []
   end
 
   def call
     new_data = parse_new_files(cache: @use_cache)
     existing_data = parse_existing_files(cache: @use_cache)
+
     cmds = []
     # здесь можем делать с $existing_data и $new_data что хотим
 
@@ -69,34 +70,41 @@ class Reorganizer
 
     write_actions_file(actions)
     write_errors_file(errors)
-    write_commands_file(cmds)
+    # write_commands_file(cmds)
     cmds
   end
 
-  def write_commands_file(cmds)
+  # def write_commands_file(cmds)
+  #   IO.write(
+  #     File.join(@dirs[:data_dir], @output_commands_file),
+  #     cmds.join("\n"),
+  #     external_encoding: Encoding::CP866
+  #   )
+  # rescue Encoding::UndefinedConversionError => e
+  #   LOG.error(e.message.red)
+  #   IO.write(
+  #     File.join(@dirs[:data_dir], "#{@output_commands_file}.utf8"),
+  #     cmds.join("\n")
+  #   )
+  # end
+
+  def write_data(data)
     IO.write(
-      File.join(@dirs[:dups_dir], @output_commands_file),
-      cmds.join("\n"),
-      external_encoding: Encoding::CP866
-    )
-  rescue Encoding::UndefinedConversionError => e
-    LOG.error(e.message.red)
-    IO.write(
-      File.join(@dirs[:dups_dir], "#{@output_commands_file}.utf8"),
-      cmds.join("\n")
+      File.join(@dirs[:data_dir], "#{data[:type]}_files.json"),
+      JSON.pretty_generate(data)
     )
   end
 
   def write_actions_file(actions)
     IO.write(
-      File.join(@dirs[:dups_dir], 'actions.json'),
+      File.join(@dirs[:data_dir], 'actions.json'),
       JSON.pretty_generate(actions)
     )
   end
 
   def write_errors_file(errors)
     IO.write(
-      File.join(@dirs[:dups_dir], 'errors.json'),
+      File.join(@dirs[:data_dir], 'errors.json'),
       JSON.pretty_generate(errors)
     )
   end
@@ -168,9 +176,9 @@ class Reorganizer
   # $current_type = :existing
   def parse_files(type, dir, cache: false)
     data = nil
-    counters = Counters.new(type, @dirs[:cache_dir])
+    counters = Counters.new(type, @dirs[:data_dir])
 
-    json_file = File.join(@dirs[:cache_dir], "#{type}_files.json")
+    json_file = File.join(@dirs[:data_dir], "#{type}_files.json")
     if cache && File.exist?(json_file)
       data = read_hash(json_file)
       counters.increase(:from_cache)

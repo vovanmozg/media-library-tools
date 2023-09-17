@@ -8,7 +8,22 @@ RUN apt-get update && \
 #    apt-get install -y libmagickwand-dev && \
     rm -rf /var/lib/apt/lists/*
 
-RUN gem install activesupport awesome_print chunky_png colored exif fastimage highline pry-byebug phashion rmagick rspec ruby-filemagic streamio-ffmpeg
+RUN gem install activesupport \
+    awesome_print \
+    chunky_png \
+    colored \
+    exif \
+    fastimage \
+    highline \
+    pry-byebug \
+    phashion \
+    puma \
+    rerun \
+    rmagick \
+    rspec \
+    ruby-filemagic \
+    sinatra \
+    streamio-ffmpeg
 
 WORKDIR /app
 

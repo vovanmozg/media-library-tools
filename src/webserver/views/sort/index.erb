@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Sorter</title>
+  <style>
+    div.item {
+
+      border: 2px solid #eee;
+      padding: 5px;
+      position: relative;
+    }
+
+    .clear {
+      clear: both;
+    }
+
+    #duplicatesContainer .infoContainer {
+      float: left;
+      width: 300px;
+      position: relative;
+    }
+
+    #duplicatesContainer img {
+      border: 1px solid #555;
+      border-bottom-width: 5px;
+      width: <%= DEFAULT_THUMB_WIDTH %>px;
+      float: left;
+    }
+    #duplicatesContainer img.smaller {
+      width: <%= DEFAULT_THUMB_WIDTH * SMALLER_THUMB_RATIO %>px;
+    }
+
+    #duplicatesContainer .foto .infoContainer {
+      left: 0;
+    }
+
+    #duplicatesContainer .fotoother .infoContainer {
+      left: 300px;
+    }
+
+    #duplicatesContainer .nofoto .infoContainer {
+      left: 600px;
+    }
+
+    #duplicatesContainer .health .infoContainer {
+      left: 620px;
+    }
+
+    #duplicatesContainer .documents .infoContainer {
+      left: 640px;
+    }
+
+    #duplicatesContainer .my .infoContainer {
+      left: 660px;
+    }
+
+    #duplicatesContainer .alien .infoContainer {
+      left: 900px;
+    }
+
+    #duplicatesContainer .archive .infoContainer {
+      left: 1200px;
+    }
+
+    #duplicatesContainer .non-sorted .infoContainer {
+      left: 1500px;
+    }
+
+    div.current {
+      border-color: #bbb;
+      background-color: #eeffee;
+    }
+
+    div.marker {
+      border: 1px solid #000;
+      width: 20px;
+      float: left;
+    }
+
+    .imageContainer {
+      background-color: #eee;
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let items = document.querySelectorAll('.item');
+      let currentIndex = 0;
+
+      let actions = [
+        'foto',
+        'fotoother',
+        'alien',
+        'nofoto',
+        'health',
+        'documents',
+        'archive',
+        'non-sorted',
+      ];
+
+      function selectCurrentItem() {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            item.classList.add('current');
+            item.scrollIntoView({ behavior: 'instant', block: 'center' });
+          } else {
+            item.classList.remove('current');
+          }
+        });
+      }
+
+      function selectAction(direction) {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            let currentAction = actions.indexOf(item.querySelector('input[type="hidden"]').value);
+
+            if (direction === 1 && currentAction < actions.length - 1) {
+              currentAction++;
+            } else if (direction === -1 && currentAction > 0) {
+              currentAction--;
+            } else {
+              return;
+            }
+
+            item.querySelector('input[type="hidden"]').value = actions[currentAction];
+            item.querySelector('.action').innerHTML = actions[currentAction];
+            item.classList.remove(...actions);
+            item.classList.add(actions[currentAction]);
+          }
+        });
+      }
+
+      function selectActionByActionType(actionType) {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            item.querySelector('input[type="hidden"]').value = actionType;
+            item.querySelector('.action').innerHTML = actionType;
+            item.classList.remove(...actions);
+            item.classList.add(actionType);
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (!e.ctrlKey) {
+          switch (e.keyCode) {
+            case 38: // up arrow
+              if (currentIndex > 0) currentIndex--;
+              selectCurrentItem();
+              e.preventDefault();
+              return;
+            case 40: // down arrow
+              if (currentIndex < items.length - 1) currentIndex++;
+              selectCurrentItem();
+              e.preventDefault();
+              return;
+            case 37: // left arrow
+              //if (currentAction > 0) currentAction--;
+              selectAction(-1);
+              e.preventDefault();
+              break;
+            case 39: // right arrow
+              //if (currentAction < actions.length - 1) currentAction++;
+              selectAction(1);
+              e.preventDefault();
+              break;
+
+            case 70: // f
+              selectActionByActionType('foto');
+              e.preventDefault();
+              return;
+            case 84: // t
+              selectActionByActionType('fotoother');
+              e.preventDefault();
+              return;
+            case 78: // n
+              selectActionByActionType('nofoto');
+              e.preventDefault();
+              return;
+            case 65: // a
+              selectActionByActionType('archive');
+              e.preventDefault();
+              break;
+            case 76: // l
+              selectActionByActionType('alien');
+              e.preventDefault();
+              break;
+            case 90: // z
+              selectActionByActionType('health');
+              e.preventDefault();
+              break;
+            case 68: // d
+              selectActionByActionType('documents');
+              e.preventDefault();
+              break;
+            case 88: // x
+              selectActionByActionType('non-sorted');
+              e.preventDefault();
+              return;
+
+          }
+        }
+      });
+      // processing mouse clicks
+      items.forEach((item, index) => {
+        item.addEventListener('click', function(e) {
+          currentIndex = index;
+          selectCurrentItem();
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+
+<form method="post" action="" id="imageActionsForm">
+  <div id="duplicatesContainer">
+    <% @media_items.each do |item| %>
+      <div class="item <%= item[:default_action] %>">
+        <div class="infoContainer">
+          <div class="imageContainer">
+            <a href="/image?x&path=<%= item[:file_name] %>" target="_blank">
+            <img
+              src="/image?path=<%= item[:file_name] %>"
+              style="height: <%= item[:original_img_height] %>px;"
+            >
+            </a>
+            <div class="marker marker-original"><%= item[:is_original_heavier_same_resolution] ? "⚓" : "" %></div>
+            <div class="clear"></div>
+          </div>
+          <p>
+            <%= item[:file_name] %><br />
+<!--            <%#= item %><br />-->
+
+          </p>
+        </div>
+
+        <div class="action"><%= item[:default_action] %></div>
+        <div class="clear"></div>
+        <!-- Hidden input to store action for this image -->
+        <input type="hidden" name="imageAction[<%= item[:file_name] %>]" value="">
+      </div>
+    <% end %>
+    <!-- Submit button -->
+    <input type="submit" value="Submit Actions">
+  </div>
+</form>
+
+<div style="padding-top: 2em">
+  <p>items: <%= @media_items.count %></p>
+  <p>CTRL + Up/Down - select image</p>
+  <p>CTRL + Left/Right - change action</p>
+</div>
+
+<div id="results" style="padding-top: 2em">
+  <pre><%= @log %></pre>
+</div>
+
+</body>
+</html>

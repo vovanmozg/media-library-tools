@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Duplicate Remover</title>
+  <style>
+    div.item {
+      margin-bottom: 20px;
+      border: 2px solid #eee;
+      padding: 10px;
+      position: relative;
+    }
+
+    .clear {
+      clear: both;
+    }
+
+    #duplicatesContainer .infoContainer {
+      float: left;
+      width: 300px;
+      position: relative;
+    }
+
+    #duplicatesContainer .infoContainer.original {
+      border: 2px solid #000;
+    }
+
+    #duplicatesContainer .infoContainer.dup {
+
+    }
+
+    #duplicatesContainer img {
+      border: 1px solid #555;
+      border-bottom-width: 5px;
+      width: <%= DEFAULT_THUMB_WIDTH %>px;
+      float: left;
+    }
+    #duplicatesContainer img.smaller {
+      width: <%= DEFAULT_THUMB_WIDTH * SMALLER_THUMB_RATIO %>px;
+    }
+
+    #duplicatesContainer .orig-skip-dup-remove .infoContainer.original {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-skip-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-remove-dup-skip .infoContainer.original {
+      left: 300px;
+    }
+
+    #duplicatesContainer .orig-remove-dup-skip .infoContainer.dup {
+      left: -300px;
+    }
+
+    #duplicatesContainer .orig-remove-dup-remove .infoContainer.original {
+      left: 300px;
+    }
+
+    #duplicatesContainer .orig-remove-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-archive-dup-remove .infoContainer.original {
+      left: 1200px;
+    }
+
+    #duplicatesContainer .orig-archive-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-skip-dup-skip .infoContainer.original {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-skip-dup-skip .infoContainer.dup {
+      left: -300px;
+    }
+
+    #duplicatesContainer .orig-nofoto-dup-remove .infoContainer.original {
+      left: 600px;
+    }
+
+    #duplicatesContainer .orig-nofoto-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-other-dup-remove .infoContainer.original {
+      left: 900px;
+    }
+
+    #duplicatesContainer .orig-other-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-alien-dup-remove .infoContainer.original {
+      left: 1200px;
+    }
+
+    #duplicatesContainer .orig-other-dup-remove .infoContainer.dup {
+      left: 0;
+    }
+
+    #duplicatesContainer .orig-skip-dup-remove .dup img,
+    #duplicatesContainer .orig-remove-dup-skip .original img,
+    #duplicatesContainer .orig-remove-dup-remove .original img,
+    #duplicatesContainer .orig-remove-dup-remove .dup img {
+      border-bottom: 5px solid #f00;
+    }
+
+    #duplicatesContainer .orig-archive-dup-remove .original img {
+      border-bottom: 5px solid yellow;
+    }
+
+    #duplicatesContainer .orig-archive-dup-remove .dup img {
+      border-bottom: 5px solid #f00;
+    }
+
+    #duplicatesContainer .orig-skip-dup-remove .original img,
+    #duplicatesContainer .orig-remove-dup-skip .dup img {
+      border-bottom: 5px solid transparent;
+    }
+
+    #duplicatesContainer .orig-nofoto-dup-remove .original img {
+      border-bottom: 5px solid #08f;
+    }
+
+    #duplicatesContainer .orig-nofoto-dup-remove .dup img {
+      border-color: #f00;
+    }
+
+    #duplicatesContainer .orig-other-dup-remove .original img {
+      border-bottom: 5px solid #808;
+    }
+
+    #duplicatesContainer .orig-other-dup-remove .dup img {
+      border-color: #f00;
+    }
+
+    #duplicatesContainer .orig-alien-dup-remove .original img {
+      border-bottom: 5px solid #d82ed8;
+    }
+
+    #duplicatesContainer .orig-alien-dup-remove .dup img {
+      border-color: #f00;
+    }
+
+    div.current {
+      border-color: #eeffee;
+      background-color: #eeffee;
+    }
+
+    div.marker {
+      border: 1px solid #000;
+      width: 20px;
+      float: left;
+    }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      let items = document.querySelectorAll('.item');
+      let currentIndex = 0;
+
+      let actions = [
+        'orig-remove-dup-skip',
+        'orig-skip-dup-remove',
+        'orig-remove-dup-remove',
+        'orig-archive-dup-remove', // переместить оба файла в папку archive
+        'orig-skip-dup-skip',
+        'orig-nofoto-dup-remove', // удалить дубликат, переместить оригинал в nofoto
+        'orig-other-dup-remove', // удалить дубликат, переместить оригинал в папку foto-other
+        'orig-alien-dup-remove', // удалить дубликат, переместить оригинал в папку alien
+      ];
+      //let currentAction = 1;
+
+      // Update the hidden input value when action changes
+//             function updateActionInput() {
+//                 items[currentIndex].querySelector('input[type="hidden"]').value = actions[currentAction];
+//             }
+
+      function selectCurrentItem() {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            item.classList.add('current');
+            item.scrollIntoView({ behavior: 'instant', block: 'center' });
+          } else {
+            item.classList.remove('current');
+          }
+        });
+      }
+
+      function selectAction(direction) {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            let currentAction = actions.indexOf(item.querySelector('input[type="hidden"]').value);
+
+            if (direction === 1 && currentAction < actions.length - 1) {
+              currentAction++;
+            } else if (direction === -1 && currentAction > 0) {
+              currentAction--;
+            } else {
+              return;
+            }
+
+            item.querySelector('input[type="hidden"]').value = actions[currentAction];
+            item.querySelector('.action').innerHTML = actions[currentAction];
+            item.classList.remove(...actions);
+            item.classList.add(actions[currentAction]);
+          }
+        });
+      }
+
+      function selectActionByActionType(actionType) {
+        items.forEach((item, index) => {
+          if (index === currentIndex) {
+            item.querySelector('input[type="hidden"]').value = actionType;
+            item.querySelector('.action').innerHTML = actionType;
+            item.classList.remove(...actions);
+            item.classList.add(actionType);
+          }
+        });
+      }
+
+      document.addEventListener('keydown', function(e) {
+        if (!e.ctrlKey) {
+          switch (e.keyCode) {
+            case 38: // up arrow
+              if (currentIndex > 0) currentIndex--;
+              selectCurrentItem();
+              e.preventDefault();
+              return;
+            case 40: // down arrow
+              if (currentIndex < items.length - 1) currentIndex++;
+              selectCurrentItem();
+              e.preventDefault();
+              return;
+            case 37: // left arrow
+              //if (currentAction > 0) currentAction--;
+              selectAction(-1);
+              e.preventDefault();
+              break;
+            case 39: // right arrow
+              //if (currentAction < actions.length - 1) currentAction++;
+              selectAction(1);
+              e.preventDefault();
+              break;
+
+            case 79: // o
+              selectActionByActionType('orig-remove-dup-skip');
+              e.preventDefault();
+              break;
+            case 68: // d
+              selectActionByActionType('orig-skip-dup-remove');
+              e.preventDefault();
+              break;
+            case 66: // b
+              selectActionByActionType('orig-remove-dup-remove');
+              e.preventDefault();
+              break;
+            case 65: // a
+              selectActionByActionType('orig-archive-dup-remove');
+              e.preventDefault();
+              break;
+            case 83: // s
+              selectActionByActionType('orig-skip-dup-skip');
+              e.preventDefault();
+              return;
+            case 78: // n
+              selectActionByActionType('orig-nofoto-dup-remove');
+              e.preventDefault();
+              return;
+            case 84: // t
+              selectActionByActionType('orig-other-dup-remove');
+              e.preventDefault();
+              return;
+            case 76: // l
+              selectActionByActionType('orig-alien-dup-remove');
+              e.preventDefault();
+              return;
+
+          }
+        }
+      });
+      // processing mouse clicks
+      items.forEach((item, index) => {
+        item.addEventListener('click', function(e) {
+          currentIndex = index;
+          selectCurrentItem();
+        });
+      });
+    });
+  </script>
+</head>
+<body>
+
+<!--<form method="post" action="">-->
+<!--  <select name="data_area" onchange="this.form.submit();">-->
+<%# data.each do |key, value| %>
+<!--    <option value="<?= $key ?>" <%#= key == selected_area ? 'selected' : '' %>><%#= key %></option>-->
+<%# end %>
+<!--  </select>-->
+<!--</form>-->
+
+<form method="post" action="" id="imageActionsForm">
+  <div id="duplicatesContainer">
+    <% @selected_items.each do |item| %>
+      <div class="item <%= item[:default_action] %>">
+        <div class="infoContainer original">
+          <div class="imageContainer">
+            <img
+              src="<%= item[:original_img_url] %>"
+              class="<%= item[:img_original_class] %>"
+              style="height: <%= item[:original_img_height] %>px;"
+            >
+            <div class="marker marker-original"><%= item[:is_original_heavier_same_resolution] ? "⚓" : "" %></div>
+            <div class="clear"></div>
+          </div>
+          <p>
+            <%= item[:action_type] %><br />
+            <%= true || item[:original_phash] != item[:dup_phash] ? item[:original_phash].to_s + '<br />' : '' %>
+            <%= item[:original_width] %>x<%= item[:original_height] %><br />
+            <%= item[:original_size] %><br />
+            <small><%= item[:display_original_path] %></small>
+          </p>
+        </div>
+        <div class="infoContainer dup">
+          <div class="imageContainer">
+            <div class="marker marker-dup"><%= item[:is_dup_heavier_same_resolution] ? "⚓" : "" %></div>
+            <img src="<%= item[:dup_img_url] %>" class="<%= item[:img_dup_class] %>" style="height: <%= item[:dup_img_height] %>px;">
+            <div class="clear"></div>
+          </div>
+          <p>
+            <%= item[:action_type] %><br />
+            <%= true || item[:original_phash] != item[:dup_phash] ? item[:dup_phash].to_s + '<br />' : '' %>
+            <%= item[:dup_width] %>x<%= item[:dup_height] %><br />
+            <%= item[:dup_size] %><br />
+            <small><%= item[:display_dup_path] %></small>
+          </p>
+        </div>
+        <div class="action"><%= item[:default_action] %></div>
+        <div class="clear"></div>
+        <!-- Hidden input to store action for this image -->
+        <input type="hidden" name="imageAction[<%= item[:to] %>]" value="<%= item[:default_action] %>">
+      </div>
+    <% end %>
+    <!-- Submit button -->
+    <input type="submit" value="Submit Actions">
+  </div>
+</form>
+
+<div style="padding-top: 2em">
+  <p>items: <%= @selected_items.count %> / <%= @all_items_count %>, skipped: <%= @skipped_count %></p>
+  <p>CTRL + Up/Down - select image</p>
+  <p>CTRL + Left/Right - change action</p>
+</div>
+
+<div id="results" style="padding-top: 2em">
+  <pre><%= @log %></pre>
+</div>
+
+</body>
+</html>

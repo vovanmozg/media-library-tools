@@ -6,7 +6,7 @@ dirs = {
   existing_dir: "/vt/existing",
   new_dir: "/vt/new",
   dups_dir: "/vt/dups",
-  cache_dir: "/vt/cache"
+  data_dir: "/vt/data"
 }
 
 args = {
@@ -27,6 +27,10 @@ ARGV.each do|arg|
 
   if arg.start_with?('--system')
     args[:system] = arg.split('=')[1].to_sym
+  end
+
+  if arg.start_with?('--cache-meta')
+    args[:use_cache] = arg.split('=')[1] == 'true'
   end
 end
 
