@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Image Gallery with Duplicates</title>
+  <style>
+    .original, .duplicates .duplicate {
+      float: left;
+      width: 200px;
+      height: 200px;
+      background: #eee;
+      text-align: center;
+      position: relative;
+      margin: 2px;
+    }
+
+
+    .original img, .duplicates .duplicate img {
+      object-fit: contain;
+      max-width: 100%;
+      max-height: 100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .duplicates {
+      background: #CFF;
+      float: left;
+    }
+
+    .duplicates .duplicate {
+
+    }
+
+    .duplicates .duplicate.existing {
+      background: #8a8
+    }
+
+    .title {
+      position: absolute;
+      text-align: right;
+      text-shadow: 0px 0px 10px #000, 0px 0px 1px #000, 1px 1px 1px #000, -1px -1px 1px #000;
+      font-family: arial;
+      width: 100%;
+      color: #fff;
+      z-index: 10;
+      word-wrap: break-word;
+      bottom: 0;
+    }
+
+    .clear {
+      clear: both;
+    }
+  </style>
+</head>
+<body>
+<h1>Image Gallery with Duplicates</h1>
+<% @media_with_duplicates.each do |media_with_duplicate| %>
+  <div class="row">
+    <div class="original">
+      <img src="/image?path=<%= media_with_duplicate[:file_name] %>" alt="<%= media_with_duplicate[:name] %>">
+      <div class="title"><%= media_with_duplicate[:file_name] %></div>
+    </div>
+    <div class="duplicates">
+      <% media_with_duplicate[:duplicates].each do |duplicate| %>
+        <div class="duplicate <%= duplicate[:file] =~ %r{/vt/existing} ? 'existing' : 'new' %>">
+          <img src="/image?path=<%= duplicate[:file] %>" alt="<%= File.basename(duplicate[:file]) %>">
+          <div class="title"><%= duplicate %></div>
+        </div>
+      <% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+</body>
+</html>

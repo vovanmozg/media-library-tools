@@ -1,0 +1,17 @@
+<% current_page_data.each do |path, phash| %>
+  <p><%= "#{path}: #{phash}" %></p>
+<% end %>
+
+<div class="pagination">
+  <% (1..total_pages).each do |p| %>
+    <% if p == page %>
+      <span><%= p %></span>
+    <% else %>
+      <a href="/phashes/collect?page=<%= p %>"><%= p %></a>
+    <% end %>
+  <% end %>
+</div>
+
+<form method="post" action="/phashes/collect">
+  <input type="submit" value="Collect">
+</form>

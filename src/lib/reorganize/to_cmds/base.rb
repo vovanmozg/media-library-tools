@@ -87,6 +87,7 @@ class ToCmds
 
       is_changed = false
 
+      path = path.to_s
       if @dirs[:new_dir] && @dirs[:real_new_dir] && @dirs[:new_dir] != @dirs[:real_new_dir]
         path = path.gsub(%r{\A#{@dirs[:new_dir]}}, @dirs[:real_new_dir])
         is_changed = true

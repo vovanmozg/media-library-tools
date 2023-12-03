@@ -1,5 +1,36 @@
+# frozen_string_literal: true
+
+require 'find'
+require 'filemagic'
+require './lib/media'
+
 class ManualDups; end
-class ManualDups::Index
+class ManualDups::Realtime
+  FM = FileMagic.new
+
+  # @param pattern [String] regexp для выбора файлов по пути
+  def call(per: 50, page: 1, pattern: nil, threshold: 12)
+    searcher = Images::Dups.new
+    @media = Media.new('/vt/data', LOG)
+    @threshold = threshold
+    infos = []
+
+    scan_files('/vt/new', per, pattern, LOG) do |file_name|
+      info = @media.read_file!(file_name, FM)
+      info[:file_name] = file_name
+      info[:duplicates] = searcher.find(info, threshold).map do |dup|
+        dup[:file_name] = @media.read_file!(dup[:file], FM)
+        dup
+      end
+
+      infos << info
+    end
+
+    infos
+  end
+
+
+
   def call(cache_dir)
     data = JSON.parse(File.read(File.join(cache_dir, 'actions.json')))
 

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Phash Search Results</title>
+  <style>
+    .highlight {
+      background-color: yellow;
+    }
+  </style>
+</head>
+<body>
+<h1>Phash Search Results</h1>
+<% if similar_files.any? %>
+  <table border="1">
+    <tr>
+      <th>File</th>
+      <th>Phash</th>
+      <th>Distance</th>
+    </tr>
+    <% similar_files.each do |file_info| %>
+      <tr>
+        <td><%= file_info[:file] %></td>
+        <td><%= file_info[:phash] %></td>
+        <td class="<%= 'highlight' if file_info[:distance] < 10 %>"><%= file_info[:distance] %></td>
+      </tr>
+    <% end %>
+  </table>
+<% else %>
+  <p>No similar files found.</p>
+<% end %>
+</body>
+</html>

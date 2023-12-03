@@ -7,6 +7,6 @@
 #   -v /mnt/papamedia/cache:/app/cache \
 #   vovan/media_tools ./server.sh
 
-# rerun --no-notify 'ruby ./webserver/app.rb'
-ruby ./webserver/app.rb
+rerun --background --no-notify 'ruby ./webserver/app.rb'
+# ruby ./webserver/app.rb
 
