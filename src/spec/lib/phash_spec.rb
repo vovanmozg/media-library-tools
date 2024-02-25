@@ -10,7 +10,7 @@ describe PHashImage do
     actual = phash.get_file_info(file_name)
     expected = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       mtime: 1_542_905_014

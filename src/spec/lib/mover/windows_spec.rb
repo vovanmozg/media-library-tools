@@ -10,7 +10,7 @@ describe Mover do
         type: 'move',
         original: {
           video_length: 57.91,
-          phash: 3804812306793776725,
+          phash: 3_804_812_306_793_776_725,
           width: 640,
           height: 640,
           mtime: 1_546_238_794,
@@ -25,7 +25,7 @@ describe Mover do
         from: {
           type: 'video',
           video_length: 59.048,
-          phash: 16484718488333250133,
+          phash: 16_484_718_488_333_250_133,
           width: 480,
           height: 480,
           mtime: 1_543_791_499,

@@ -10,8 +10,8 @@ describe OperationsMaker do
     FileUtils.cp('./spec/fixtures/operations_maker/full_dups-actions.json', "#{data_dir}/actions.json")
 
     described_class.new(settings: {
-      data_dir: data_dir,
-    }).call
+                          data_dir:
+                        }).call
 
     actual = jf('/data/operations.json', @root)
     # FileUtils.cp("#{data_dir}/operations.json", './spec/fixtures/operations_maker/operations.json')
@@ -26,11 +26,11 @@ describe OperationsMaker do
     FileUtils.cp('./spec/fixtures/operations_maker/inside_new_full_dups-actions.json', "#{data_dir}/actions.json")
 
     described_class.new(settings: {
-      data_dir: data_dir,
-      new_dir: '/mnt/media',
-      real_new_dir: '/mnt/media/remove',
-      real_dups_dir: '/mnt/media/dups',
-    }).call
+                          data_dir:,
+                          new_dir: '/mnt/media',
+                          real_new_dir: '/mnt/media/remove',
+                          real_dups_dir: '/mnt/media/dups'
+                        }).call
 
     actual = jf('/data/operations.json', @root)
     expected = jf('./spec/fixtures/operations_maker/inside_new_full_dups-operations.json')
@@ -54,21 +54,21 @@ describe OperationsMaker do
 
     it 'does not convert if wrong dirs' do
       settings = { new_dir: '/new', system: :windows }
-      converter = described_class.new(settings: settings)
+      converter = described_class.new(settings:)
       actual = converter.send(:normalize, '/new/x/1.mp4')
       expect(actual).to eq('/new/x/1.mp4')
     end
 
     it 'converts path with file in new_dir for windows' do
       settings = { new_dir: '/new', real_new_dir: 'C:\\new', system: :windows }
-      converter = described_class.new(settings: settings)
+      converter = described_class.new(settings:)
       actual = converter.send(:normalize, '/new')
       expect(actual).to eq('C:\\new')
     end
 
     it 'converts path with file in dups for windows' do
       settings = { dups_dir: '/dups', real_dups_dir: 'C:\\dups', system: :windows }
-      converter = described_class.new(settings: settings)
+      converter = described_class.new(settings:)
       actual = converter.send(:normalize, '/dups')
       expect(actual).to eq('C:\\dups')
     end

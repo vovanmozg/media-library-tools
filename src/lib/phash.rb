@@ -21,8 +21,8 @@ class PHashImage
     {
       type: 'image',
       phash: PHashImage.phash(file_path),
-      width: width,
-      height: height,
+      width:,
+      height:,
       mtime: File.mtime(file_path).to_i
     }
   end
@@ -60,7 +60,7 @@ class PHashImage
   end
 
   def read_with_imagemagic(file_name)
-    image = Magick::Image::read(file_name).first
+    image = Magick::Image.read(file_name).first
     return nil if image.nil?
 
     [image.columns, image.rows]
@@ -132,8 +132,8 @@ class PHashVideo
 
     {
       type: 'video',
-      video_length: video_length,
-      phash: phash,
+      video_length:,
+      phash:,
       width: ffprobe_video_info[:streams][0][:width],
       height: ffprobe_video_info[:streams][0][:height],
       mtime: File.mtime(video_path).to_i

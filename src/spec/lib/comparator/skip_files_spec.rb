@@ -8,7 +8,7 @@ describe SkipFiles do
     files_to_processing = {
       '/new/x/1' => {
         type: 'image',
-        phash: 10787907979500066548,
+        phash: 10_787_907_979_500_066_548,
         width: 250,
         height: 250,
         partial_md5: '63f3c713a01010bbcafdfafa3d688566',

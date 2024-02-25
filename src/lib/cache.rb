@@ -85,9 +85,9 @@ class Cache
     mtime = File.mtime(file_name).to_i
     if format == :json
       {
-        mtime: mtime,
-        size: size,
-        name: name,
+        mtime:,
+        size:,
+        name:,
         id: "#{mtime} #{size} #{name}"
       }
     else

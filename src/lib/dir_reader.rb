@@ -28,7 +28,7 @@ class DirReader
       data = read_cache(cache_file)
       counters.increase(:from_cache)
     else
-      data = parse_files_without_cache(dir: dir, data_dir: data_dir, validate: true)
+      data = parse_files_without_cache(dir:, data_dir:, validate: true)
     end
 
     write_cache(cache_file, data) if data && invalidate_cache
@@ -58,7 +58,8 @@ class DirReader
   end
 
   def scan_files(dir_name)
-    exts = %w(3gp 3gpp ai avi bmp bup cds dcm dng eps gif h264 jpeg jpg m4a m4v mov mp4 mpg mpo mts ogv png ptl scn svg tif vob webp wlmp wma wmf wmv)
+    exts = %w[3gp 3gpp ai avi bmp bup cds dcm dng eps gif h264 jpeg jpg m4a m4v mov mp4 mpg mpo mts ogv png ptl scn svg
+              tif vob webp wlmp wma wmf wmv]
     exts += exts.map(&:upcase)
     allow = exts.product([1]).to_h
 

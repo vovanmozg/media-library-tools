@@ -1,4 +1,4 @@
-FROM ruby:3.0.0
+FROM ruby:3.1.3
 
 RUN apt-get update && \
     apt-get install -y ffmpeg && \
@@ -18,6 +18,7 @@ RUN gem install activesupport \
     pry-byebug \
     phashion \
     puma \
+    rackup \
     rerun \
     rmagick \
     rspec \

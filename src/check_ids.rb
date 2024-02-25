@@ -35,13 +35,12 @@ class Fast
   end
 
   def call
-    dups = {}
     scan_files(@media_dir) do |file_name|
       name = File.basename(file_name)
       size = File.size(file_name).to_s
       mtime = File.mtime(file_name).to_s
 
-      hash = Digest::MD5.hexdigest("#{name} #{size} #{mtime}")
+      Digest::MD5.hexdigest("#{name} #{size} #{mtime}")
       # raise "#{name} #{size} #{mtime}" if dups[hash]
       #
       # dups[hash] = hash

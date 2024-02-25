@@ -11,13 +11,13 @@ describe ProcessInsideNewFullDups do
     let(:data) do
       {
         'x/1 identical.jpg' => {
-          phash: 10787907979500066548,
+          phash: 10_787_907_979_500_066_548,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           name: '1 identical.jpg',
           root: '/new'
         },
         'x/1.jpg' => {
-          phash: 10787907979500066548,
+          phash: 10_787_907_979_500_066_548,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           name: '1.jpg',
           root: '/new'
@@ -49,12 +49,12 @@ describe ProcessInsideNewFullDups do
     it 'returns error' do
       data = {
         'x/1 identical.jpg' => {
-          phash: 10787907979500066548,
+          phash: 10_787_907_979_500_066_548,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           root: '/new'
         },
         'x/1.jpg' => {
-          phash: 55555555555555555555,
+          phash: 55_555_555_555_555_555_555,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           root: '/new'
         }
@@ -67,7 +67,7 @@ describe ProcessInsideNewFullDups do
   it 'returns only one file with biggest filename' do
     image1 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
@@ -79,7 +79,7 @@ describe ProcessInsideNewFullDups do
     }
     image2 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
@@ -113,7 +113,7 @@ describe ProcessInsideNewFullDups do
   it 'returns only one oldest file' do
     image1 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
@@ -125,7 +125,7 @@ describe ProcessInsideNewFullDups do
     }
     image2 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',

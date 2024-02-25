@@ -91,7 +91,7 @@ class ProcessInsideNewSimilar
       actions << {
         type: 'move',
         from: data[relative_path].merge(
-          relative_path: relative_path
+          relative_path:
         ),
         to: {
           root: @dups_dir,

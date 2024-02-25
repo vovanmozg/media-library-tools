@@ -56,7 +56,7 @@ class Media
     @log.error(message.red)
     {
       type: 'error',
-      message: message
+      message:
     }
   rescue UnknownPhashError => e
     raise e unless e.message == 'Unknown pHash error'
@@ -138,7 +138,7 @@ class Media
 
   # Отношение длины к ширине округленное до одного знака после запятой
   def self.calculate_ratio(file_info)
-    ratio = (file_info[:width].to_f / file_info[:height].to_f)
+    ratio = (file_info[:width].to_f / file_info[:height])
     (ratio * 10).round / 10.0
   end
 end

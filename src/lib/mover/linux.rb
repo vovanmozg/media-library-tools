@@ -27,7 +27,7 @@ class Mover
     def call(actions, errors)
       ToCmds.new(settings: @settings).process(
         actions_groups: actions,
-        errors: errors
+        errors:
       )
     end
   end

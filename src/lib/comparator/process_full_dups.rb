@@ -28,7 +28,7 @@ class ProcessFullDups
       actions << {
         type: 'move',
         from: file_info.merge(
-          relative_path: relative_path
+          relative_path:
         ),
         to: {
           root: @dups_dir,

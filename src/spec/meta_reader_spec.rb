@@ -16,7 +16,7 @@ describe MetaReader do
     FileUtils.touch("#{@root}/media/1.jpg", mtime: 1_600_000_000)
 
     described_class.new(
-      media_dir: media_dir,
+      media_dir:,
       data_dir: "#{@root}/data",
       media_meta_path: 'files.json'
     ).call

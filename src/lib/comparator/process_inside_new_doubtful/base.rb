@@ -15,7 +15,7 @@ class ProcessInsideNewDoubtful
     end
 
     def length_similar?(file_info1, file_info2)
-      (file_info1[:video_length].to_f / file_info2[:video_length].to_f - 1).abs <= 0.03
+      (file_info1[:video_length].to_f / file_info2[:video_length] - 1).abs <= 0.03
     end
 
     def ratio_equal?(file_info1, file_info2)

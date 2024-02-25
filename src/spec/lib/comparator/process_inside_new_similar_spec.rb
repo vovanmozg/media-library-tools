@@ -12,13 +12,13 @@ describe ProcessInsideNewSimilar do
     it 'returns one file in new_inside_full_dups' do
       data = {
         'x/1 identical.jpg' => {
-          phash: 10787907979500066548,
+          phash: 10_787_907_979_500_066_548,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           mtime: 1_600_000_000,
           name: '1 identical.jpg'
         },
         'x/1.jpg' => {
-          phash: 10787907979500066548,
+          phash: 10_787_907_979_500_066_548,
           partial_md5: '63f3c713a01010bbcafdfafa3d688566',
           mtime: 1_600_000_000,
           name: '1.jpg'
@@ -39,7 +39,7 @@ describe ProcessInsideNewSimilar do
   it 'returns action where image2 is dup' do
     image1 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
@@ -50,7 +50,7 @@ describe ProcessInsideNewSimilar do
     }
     image2 = {
       type: 'image',
-      phash: 10787907979500066548,
+      phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
       partial_md5: '63f3c713a01010bbcafdfafa3d688566',

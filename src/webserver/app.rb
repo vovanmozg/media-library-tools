@@ -92,7 +92,7 @@ class MyApp < Sinatra::Base
   get '/image-dups/:phash' do
     similar_files = Images::Dups.new.find(params['phash'])
 
-    erb :'images/dups', locals: { similar_files: similar_files }
+    erb :'images/dups', locals: { similar_files: }
   end
 
   get '/explorer' do
@@ -101,7 +101,7 @@ class MyApp < Sinatra::Base
     pattern = params.fetch(:pattern, nil)
     threshold = params.fetch(:threshold, 12).to_i
 
-    @media_with_duplicates = Explorer::Index.new.call(page: page, per: per, pattern: pattern, threshold: threshold)
+    @media_with_duplicates = Explorer::Index.new.call(page:, per:, pattern:, threshold:)
 
     erb :'explorer/index'
   end
@@ -115,7 +115,7 @@ class MyApp < Sinatra::Base
     start_index = (page - 1) * per # начальный индекс для текущей страницы
     @current_page_data = @data.to_a[start_index, per] # данные для текущей страницы
 
-    erb :'phashes/index', locals: { page: page, total_pages: @total_pages, current_page_data: @current_page_data }
+    erb :'phashes/index', locals: { page:, total_pages: @total_pages, current_page_data: @current_page_data }
   end
 
   post '/phashes/collect' do
