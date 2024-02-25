@@ -11,6 +11,8 @@ class Media
     @log = log
   end
 
+  # Если в метод передан блок, то он будет вызван для каждого файла.
+  # В блок будет передано событие, которое произошло при чтении файла.
   def read_file!(file_name, fm, invalidate_cache = false)
     type = get_type(file_name, fm)
     return if type.nil?

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Level Directory Selector</title>
+  <script>
+    function directoryChanged(select, value = null) {
+      const path = select.value || value;
+      if (select.value) {
+        localStorage.setItem(select.id, select.value);
+      }
+
+      fetch('/folders?path=' + encodeURIComponent(path))
+        .then(response => response.json())
+        .then(data => {
+          select.innerHTML = ''; // Очистить текущий список
+          data.forEach(dir => {
+            let option = document.createElement('option');
+            option.selected = dir.path == path;
+            option.value = dir.path;
+            option.style = dir.ancestor ? "color: blue" : '';
+            option.textContent = dir.ancestor ? `> ${dir.name}` : dir.name;
+            select.appendChild(option);
+          });
+        });
+
+    }
+
+    function realDirectoryChanged(element) {
+      localStorage.setItem(element.id, element.value);
+    }
+
+    function init() {
+      const newDirDefault = localStorage.getItem('new_dir') || '<%= DOCKER_PATH_MEDIA_PREFIX %>';
+      const existingDirDefault = localStorage.getItem('existing_dir') || '<%= DOCKER_PATH_MEDIA_PREFIX %>';
+
+      directoryChanged(document.getElementById('new_dir'), newDirDefault)
+      directoryChanged(document.getElementById('existing_dir'), existingDirDefault)
+
+      const realNewDir = document.getElementById('real_new_dir');
+      realNewDir.value = localStorage.getItem('real_new_dir')
+
+      const realExistingDir = document.getElementById('real_existing_dir');
+      realExistingDir.value = localStorage.getItem('real_existing_dir')
+
+      const realDupsDir = document.getElementById('real_dups_dir');
+      realDupsDir.value = localStorage.getItem('real_dups_dir')
+    }
+
+  </script>
+</head>
+<body onload="init()">
+
+<table>
+  <tr>
+    <th>R</th>
+    <th>C</th>
+    <th>O</th>
+    <th>M</th>
+  </tr>
+</table>
+<form action="/folder-compare" method="post">
+  <fieldset>
+    <legend>Steps</legend>
+    <input type="checkbox" name="steps[]" value="read_meta" checked>read_meta -
+     Reads meta information from all images and videos and saves to data directory
+    to file <code>files_#{type}_#{@suffix}.json</code> where type is new or existing
+    and @suffix is ID composed from path of processing directory<br>
+    <input type="checkbox" name="steps[]" value="compare" checked>compare<br>
+    <input type="checkbox" name="steps[]" value="make_operations" checked>make_operations<br>
+    <input type="checkbox" name="steps[]" value="move" checked>move<br>
+  </fieldset>
+
+  <p>
+    <label for="new_dir">New dir:</label>
+    <select id="new_dir" name="new_dir" onchange="directoryChanged(this)">
+    </select>
+  </p>
+
+  <p>
+    <label for="real_new_dir">Real new dir:
+      <input type="text" name="real_new_dir" id="real_new_dir" value="" onchange="realDirectoryChanged(this)" onkeyup="realDirectoryChanged(this)" />
+    </label>
+  </p>
+
+  <p>
+    <label for="existing_dir">Original (existing) dir:</label>
+    <select id="existing_dir" name="existing_dir" onchange="directoryChanged(this)">
+    </select>
+  </p>
+
+  <p>
+    <label for="real_existing_dir">Real original (existing) dir:
+      <input type="text" id="real_existing_dir" name="real_existing_dir" value=""  onchange="realDirectoryChanged(this)" onkeyup="realDirectoryChanged(this)"  />
+    </label>
+  </p>
+
+  <p>
+    <label for="real_dups_dir">Real dups dir:
+      <input type="text" id="real_dups_dir" name="real_dups_dir" value=""  onchange="realDirectoryChanged(this)" onkeyup="realDirectoryChanged(this)"  />
+    </label>
+  </p>
+
+  <!-- checkboxes for action types -->
+  <fieldset>
+    <legend>Comparations types</legend>
+    <input type="checkbox" name="compare_types[]" value="full_dups" checked>full_dups<br>
+    <input type="checkbox" name="compare_types[]" value="inside_new_full_dups">inside_new_full_dups<br>
+    <input type="checkbox" name="compare_types[]" value="similar">similar<br>
+    <input type="checkbox" name="compare_types[]" value="inside_new_similar">inside_new_similar<br>
+    <input type="checkbox" name="compare_types[]" value="inside_new_doubtful">inside_new_doubtful<br>
+    <input type="checkbox" name="compare_types[]" value="show_skipped">show skipped section<br>
+  </fieldset>
+
+  <p>
+    <label for="media_meta_path">Media meta path:
+      <input type="text" name="media_meta_path" value="<%= @media_meta_path %>">
+    </label>
+  </p>
+
+  <pre>
+    Base new dir: <%= DOCKER_PATH_NEW_PREFIX %> (<%= @new_dir_files_count %>)
+    Base existing dir: <%= DOCKER_PATH_EXISTING_PATH_PREFIX %> (<%= @existing_dir_files_count %>)
+    Base data dir: <%= DATA_DIR %>
+
+  </pre>
+
+  <input type="submit" value="Start">
+</form>
+</body>
+</html>

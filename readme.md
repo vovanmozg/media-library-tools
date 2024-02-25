@@ -79,6 +79,9 @@ docker run --rm -it --name media_tools \
 имеют одинаковый размер и одинаковые первые 16 КБ данных, то программа может посчитать
 их одинаковыми.
 
+## Examples of video for testing
+http://samples.mplayerhq.hu/
+
 # TODO
 Вместо генерации командного файла будет достаточно генерировать файл actions.json, 
 и на последующих шагах читать его и выполнять действия. Можно предусмотреть ручной 
@@ -93,10 +96,42 @@ docker run --rm -it --name media_tools \
   - screenshots
 - alien - другие люди
 - deleted - удаленные файлы. При следующей синхронизации снова могут появиться
-  файлы, которые уже были обрахотаны и удалены.
--  
+  файлы, которые уже были обработаны и удалены.
+- 
 
-## Examples of video for testing
-http://samples.mplayerhq.hu/
+## Идеи для развития
+### Возможность быстрого удаления полных дубликатов
+```bash
+docker run --rm -it --name media_tools \ 
+  -v /home/user/media/existing:/vt/existing \
+  -v /home/user/media/new:/vt/new \
+  -v /home/user/media/dups:/vt/dups \ 
+  -u=$UID:$UID \
+  vovan/media_tools ./removedups.sh
+```
+Команда removedups.sh будет сравнивать файлы в папке existing с файлами в папке
+new. Если файлы совпадают по размеру и CRC, то файл из папки new будет отмечен
+для перемещения в папку dups (будет создан bash-файл с командами переноса, 
+что позволяет перед переносом проинспектировать).
+
+Ключи removedups.sh
+--force - сразу переносить файлы, а не создавать bash-файл. 
+
+### Декомпозиция
+Кажется, что нужно разделить программу на части:
+1) Сканирование каталогов и извлечение метаданных из файлов. Результат будет 
+   записан в файлы data/phash/...
+   ```
+   docker run --rm -it --name media_tools \
+   -v /home/user/media/existing:/vt/existing \
+   -v /home/user/media/new:/vt/new \
+   -v /home/user/media/dups:/vt/dups \
+   -u=$UID:$UID \
+   vovan/media_tools ruby ./read_meta.rb
+   ```
+   Если будет включен режим кеша, то также будут созданы new_files.json и existing_files.json
+2) Сравнение файлов и формирование файла actions.json.
+3) Формирование командного файла для переноса файлов
+4) или сразу перенос файлов
 
 

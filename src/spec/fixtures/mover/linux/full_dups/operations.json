@@ -1,0 +1,86 @@
+{
+  "full_dups": [
+    {
+      "type": "move",
+      "original": {
+        "type": "video",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "1 another identical.mp4",
+        "relative_path": "x/1 another identical.mp4",
+        "root": "/vt/existing",
+        "real_root": "/vt/existing",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 1 another identical.mp4"
+      },
+      "from": {
+        "type": "video",
+        "phash": 10787907979500066547,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "1 identical.mp4",
+        "relative_path": "x/1 identical.mp4",
+        "root": "/vt/new",
+        "real_root": "/vt/new",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 1 identical.mp4"
+      },
+      "to": {
+        "relative_path": "full_dups/x/1 identical.mp4",
+        "root": "/vt/dups",
+        "real_root": "/vt/dups",
+        "distance": 3
+      }
+    },
+    {
+      "type": "move",
+      "original": {
+        "type": "video",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "1 another identical.mp4",
+        "relative_path": "x/1 another identical.mp4",
+        "root": "/vt/existing",
+        "real_root": "/vt/existing",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 1 another identical.mp4"
+      },
+      "from": {
+        "type": "video",
+        "phash": 10787907979500066547,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "1.mp4",
+        "relative_path": "x/1.mp4",
+        "root": "/vt/new",
+        "real_root": "/vt/new",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 1.mp4"
+      },
+      "to": {
+        "relative_path": "full_dups/x/1.mp4",
+        "root": "/vt/dups",
+        "real_root": "/vt/dups",
+        "distance": 3
+      }
+    }
+  ]
+}

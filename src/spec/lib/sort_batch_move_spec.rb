@@ -30,7 +30,7 @@ describe SortBatchMove do
     context 'when foto' do
       it 'moves files' do
         result = described_class.new.call(moving_actions, config)
-        expect(result).to eq(["Moved foto: #{@root}/new/тест/1.jpg to #{@root}/data/foto/тест/1.jpg<br>"])
+        expect(result).to eq(["Moved (foto): #{@root}/new/тест/1.jpg to #{@root}/data/foto/тест/1.jpg<br>"])
       end
     end
   end

@@ -22,8 +22,11 @@ RUN gem install activesupport \
     rmagick \
     rspec \
     ruby-filemagic \
+    russian \
     sinatra \
-    streamio-ffmpeg
+    streamio-ffmpeg \
+    string_to_id
+
 
 WORKDIR /app
 

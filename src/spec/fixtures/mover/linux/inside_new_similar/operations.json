@@ -1,0 +1,45 @@
+{
+  "inside_new_similar": [
+    {
+      "type": "move",
+      "original": {
+        "type": "video",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "1.mp4",
+        "relative_path": "x/1.mp4",
+        "root": "/new",
+        "real_root": "/real/new",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 1.mp4"
+      },
+      "from": {
+        "type": "video",
+        "phash": 10787907979500066547,
+        "width": 250,
+        "height": 250,
+        "ratio": 1.0,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "video_length": 4.4,
+        "name": "2.mp4",
+        "relative_path": "x/2.mp4",
+        "root": "/new",
+        "real_root": "/real/new",
+        "mtime": 1600000000,
+        "id": "63f3c713a01010bbcafdfafa3d688566 8359 2.mp4"
+      },
+      "to": {
+        "relative_path": "new_inside_similar/x/2.mp4",
+        "root": "/dups",
+        "real_root": "/real/dups",
+        "distance": 3
+      }
+    }
+  ]
+}

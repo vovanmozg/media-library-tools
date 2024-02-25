@@ -1,0 +1,24 @@
+# Summary:
+#   Identical files inside new dir: 0
+#   Similar files inside new dir: 1
+#   Doubtful similar files inside new dir: 0
+#   Files in new identical to existing: 1
+#   Files in new similar to existing: 0
+#   Broken files: 0
+#   total: 2
+#
+# ################################
+# # Similar files inside new dir #
+# ################################
+# original: REAL/new/exactly.jpg 250x250 (ratio 1.0), size: 8359, 2020-09-13 12:26:40
+# dup: 240x240 (ratio 1.0), size: 17914, distance: 0, 2020-09-13 12:26:40
+mkdir -p 'REAL/dups/new_inside_similar/one'
+mv 'REAL/new/one/smaller.jpg' 'REAL/dups/new_inside_similar/one/smaller.jpg'
+
+# ######################################
+# # Files in new identical to existing #
+# ######################################
+# original: REAL/existing/original.jpg 250x250 (ratio 1.0), size: 8359, 2020-09-13 12:26:40
+# dup: 250x250 (ratio 1.0), size: 8359, distance: 0, 2020-09-13 12:26:40
+mkdir -p 'REAL/dups/full_dups'
+mv 'REAL/new/exactly.jpg' 'REAL/dups/full_dups/exactly.jpg'

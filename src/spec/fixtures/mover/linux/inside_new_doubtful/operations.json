@@ -1,0 +1,44 @@
+{
+  "inside_new_doubtful": [
+    {
+      "type": "move",
+      "original": {
+        "video_length": 57.91,
+        "phash": 3804812306793776725,
+        "width": 640,
+        "height": 640,
+        "ratio": 1.0,
+        "mtime": 1546238794,
+        "partial_md5": "3671a74c3df57ca174186a8029d9b87d",
+        "size": 8464175,
+        "name": "1.mp4",
+        "relative_path": "x/1.mp4",
+        "root": "/new",
+        "real_root": "/real/new",
+        "id": "3671a74c3df57ca174186a8029d9b87d 8464175 1.mp4"
+      },
+      "from": {
+        "type": "video",
+        "video_length": 59.048,
+        "phash": 16484718488333250133,
+        "width": 480,
+        "height": 480,
+        "ratio": 1.0,
+        "mtime": 1543791499,
+        "partial_md5": "2510fd0e1eb11a54a005d6ebd7b5ab42",
+        "size": 5708740,
+        "name": "2.mp4",
+        "relative_path": "x/2.mp4",
+        "root": "/new",
+        "real_root": "/real/new",
+        "id": "2510fd0e1eb11a54a005d6ebd7b5ab42 5708740 2.mp4"
+      },
+      "to": {
+        "relative_path": "new_inside_similar_doubtful/x/2.mp4",
+        "root": "/dups",
+        "real_root": "/real/dups",
+        "distance": 14
+      }
+    }
+  ]
+}

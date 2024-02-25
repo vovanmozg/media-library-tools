@@ -1,0 +1,19 @@
+[
+  "# Summary:",
+  "#   Identical files inside new dir: 0",
+  "#   Similar files inside new dir: 0",
+  "#   Doubtful similar files inside new dir: 0",
+  "#   Files in new identical to existing: 0",
+  "#   Files in new similar to existing: 1",
+  "#   Broken files: 0",
+  "#   total: 1",
+  "#",
+  "# ####################################",
+  "# # Files in new similar to existing #",
+  "# ####################################",
+  "# original: /real/existing/x/1.mp4 len: 4.4, 250x250 (ratio 1.0), size: 8359, 2020-09-13 12:26:40",
+  "# dup: len: 4.4, 250x250 (ratio 1.0), size: 8359, distance: 3, 2020-09-13 12:26:40",
+  "mkdir -p '/real/dups/new_inside_similar/x'",
+  "mv '/real/new/x/2.mp4' '/real/dups/new_inside_similar/x/2.mp4'",
+  ""
+]

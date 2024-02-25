@@ -22,7 +22,7 @@ require './lib/phash'
 require './lib/cache'
 require './lib/scan_files'
 require './lib/log'
-require './lib/media'
+require './lib/dir_reader'
 require './lib/reorganize/process_inside_new_full_dups'
 require './lib/reorganize/process_inside_new_similar'
 require './lib/reorganize/process_inside_new_doubtful'
@@ -30,14 +30,13 @@ require './lib/reorganize/process_full_dups'
 require './lib/reorganize/process_similar'
 require './lib/reorganize/skip_files'
 require './lib/reorganize/to_cmds'
-require './lib/reorganize/to_cmds_json'
-require './lib/utils'
+require './lib/reorganize/to_json_cmds'
 
 # For determine type of file
 FM = FileMagic.new
 
 class Reorganizer
-  def initialize(dirs, use_cache: false, system:)
+  def initialize(dirs, use_cache: false, system:, settings: {})
     @dirs = dirs
     @dirs[:real_existing_dir] ||= dirs[:existing_dir]
     @dirs[:real_new_dir] ||= dirs[:new_dir]
@@ -47,8 +46,16 @@ class Reorganizer
     @system = system
     @use_cache = use_cache
     @output_commands_file = @system == 'linux' ? 'commands.sh.txt' : 'commands.bat.txt'
-    @media = Media.new(dirs[:data_dir], LOG)
+    @dir_reader = DirReader.new(log: LOG)
     @errors = []
+
+    @settings = {
+      inside_new_full_dups: true,
+      inside_new_similar: true,
+      inside_new_doubtful: true,
+      full_dups: true,
+      similar: true
+    }.merge(settings)
   end
 
   def call
@@ -122,84 +129,45 @@ class Reorganizer
     # Проверить, нет ли идентичных дубликатов в папке new (по частичному md5)
     # TODO: Возможно найденные на этом этапе файлы стоит дополнительно сравнить
     #  побайтово
-    processor = ProcessInsideNewFullDups.new(@dirs[:new_dir], @dirs[:dups_dir], LOG)
-    files_to_processing = new_data.except(*skipped_files)
-    actions, processed_new_files, error_files = processor.call(files_to_processing)
-    all_actions.merge!(actions)
-    all_error_files += error_files
+    if @settings[:inside_new_full_dups]
+      processor = ProcessInsideNewFullDups.new(@dirs[:new_dir], @dirs[:dups_dir], LOG)
+      files_to_processing = new_data.except(*skipped_files)
+      actions, processed_new_files, error_files = processor.call(files_to_processing)
+      all_actions.merge!(actions)
+      all_error_files += error_files
+    end
 
-    # Поискать очень похожие (distance=0) файлы в папке new
-    files_to_processing = files_to_processing.except(*processed_new_files)
-    actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
-    all_actions.merge!(actions)
-    all_error_files += error_files
+      # Поискать очень похожие (distance=0) файлы в папке new
+    if @settings[:inside_new_similar]
+      files_to_processing = files_to_processing.except(*processed_new_files)
+      actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
+      all_actions.merge!(actions)
+      all_error_files += error_files
+    end
 
     # Поискать похожие (0 < distance < 3) файлы в папке new
-    files_to_processing = files_to_processing.except(*processed_new_files)
-    actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
-    all_actions.merge!(actions)
-    all_error_files += error_files
+    if @settings[:inside_new_doubtful]
+      files_to_processing = files_to_processing.except(*processed_new_files)
+      actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
+      all_actions.merge!(actions)
+      all_error_files += error_files
+    end
 
     # Обработать полные дубликаты из new, которые уже есть в existing
-    files_to_processing = files_to_processing.except(*processed_new_files)
-    actions, processed_new_files = ProcessFullDups.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
-    all_actions.merge!(actions)
+    if @settings[:full_dups]
+      files_to_processing = files_to_processing.except(*processed_new_files)
+      actions, processed_new_files = ProcessFullDups.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
+      all_actions.merge!(actions)
+    end
 
-    # Обработать файлы из new, очень похожие (hamming distance = 0) на те, которые уже есть в existing
-    files_to_processing = files_to_processing.except(*processed_new_files)
-    actions, processed_new_files = ProcessSimilar.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
-    all_actions.merge!(actions)
+    if @settings[:similar]
+      # Обработать файлы из new, очень похожие (hamming distance = 0) на те, которые уже есть в existing
+      files_to_processing = files_to_processing.except(*processed_new_files)
+      actions, processed_new_files = ProcessSimilar.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
+      all_actions.merge!(actions)
+    end
 
     [all_actions, all_error_files]
-  end
-
-  # @return [Hash] key - full path to file, value - hash with file info
-  #
-  #   Example of return Hash with one key
-  #   {
-  #   "/app/video_existing/2019-wa/20181201-WA0007 fotomama.mp4": {
-  #     "video_length": 180.86,
-  #     "phash": 15591569520836312423,
-  #     "width": 400,
-  #     "height": 400,
-  #     "partial_md5": "100eaca7339bfbabbf3b9e4b1e51542a",
-  #     "size": 7406817,
-  #     "name": "20181201-WA0007 fotomama.mp4",
-  #     "id": "100eaca7339bfbabbf3b9e4b1e51542a 7406817 20181201-WA0007 fotomama.mp4"
-  #   },
-  # Если в папке произошли изменения, то нужно руками удалить файл existing_files.json
-  # Дело в том, что после того, как скрипт прочитает все файлы, он запишет
-  # результирующий объект в этот файл. И при следующем запуске, скрипт не будет
-  # снова читать файлы, а просто возьмет закешированные данные. Поэтому если,
-  # например, какой-то файл будет удален, то скрипт не узнает об этом и будет
-  # думать, что этот файл есть. Этот файл будет участововать при поиске дублей
-  # $current_type = :existing
-  def parse_files(type, dir, cache: false)
-    data = nil
-    counters = Counters.new(type, @dirs[:data_dir])
-
-    json_file = File.join(@dirs[:data_dir], "#{type}_files.json")
-    if cache && File.exist?(json_file)
-      data = read_hash(json_file)
-      counters.increase(:from_cache)
-    end
-
-    unless data
-      data = {}
-      scan_files(dir, LOG) do |file_name|
-        if LOG.level == Logger::INFO
-          print '.'
-        end
-        file_info = @media.read_file!(file_name, FM)
-        data[file_name] = file_info if file_info
-      end
-
-      if cache
-        IO.write(json_file, JSON.pretty_generate(data))
-      end
-    end
-
-    data.tap { |data| validate_values!(data) }
   end
 
   private
@@ -215,19 +183,10 @@ class Reorganizer
   end
 
   def parse_existing_files(cache: false)
-    parse_files(:existing, @dirs[:existing_dir], cache: cache)
+    @dir_reader.parse_files(dir: @dirs[:existing_dir], type: :existing, data_dir: @dirs[:data_dir], cache: cache)
   end
 
   def parse_new_files(cache: false)
-    parse_files(:new, @dirs[:new_dir], cache: cache)
-  end
-
-  def validate_values!(data)
-    data.each_value do |file_info|
-      missing = InvalidateCache.new.find_missing_attributes(file_info, file_info[:type])
-      unless missing.empty?
-        raise "Missing attributes #{missing}"
-      end
-    end
+    @dir_reader.parse_files(dir: @dirs[:new_dir], type: :new, data_dir: @dirs[:data_dir], cache: cache)
   end
 end

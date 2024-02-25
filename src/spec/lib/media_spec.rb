@@ -119,7 +119,8 @@ describe Media do
     end
   end
 
-  context 'when phash error' do
+  # Unknown pHash error fixed by conversion to jpg
+  xcontext 'when phash error' do
     let(:name) { '8 broken phash.gif' }
     let(:expected) do
       {

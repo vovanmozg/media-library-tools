@@ -3,6 +3,9 @@ require 'filemagic'
 require 'pry-byebug'
 require 'rspec'
 require 'tmpdir'
+require 'json'
+
+Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
 
 RSpec.configure do |config|
   config.around do |ex|
@@ -12,44 +15,13 @@ RSpec.configure do |config|
         [
           "#{@root}/existing",
           "#{@root}/new",
+          "#{@root}/media",
           "#{@root}/dups",
           "#{@root}/new_broken",
-          "#{@root}/cache"
+          "#{@root}/data"
         ]
       )
       ex.run
     end
   end
-end
-
-
-def image(props = {})
-  default = {
-    type: 'image',
-    phash: 1_000_000,
-    width: 250,
-    height: 250,
-    partial_md5: '63f3c713a01010bbcafdfafa3d688566',
-    size: 8359,
-    name: '1.jpg',
-    mtime: 1_600_000_000,
-  }
-  default[:id] = "#{default[:partial_md5]} #{default[:size]} #{default[:name]}"
-  default.merge(props)
-end
-
-def video(props = {})
-  default = {
-    type: 'video',
-    phash: 1_000_000,
-    width: 250,
-    height: 250,
-    partial_md5: '63f3c713a01010bbcafdfafa3d688566',
-    size: 8359,
-    video_length: 4.44,
-    name: '1.mp4',
-    mtime: 1_600_000_000,
-  }
-  default[:id] = "#{default[:partial_md5]} #{default[:size]} #{default[:name]}"
-  default.merge(props)
 end

@@ -1,0 +1,36 @@
+{
+  "1.jpg": {
+    "type": "image",
+    "phash": 10787907979500066548,
+    "width": 250,
+    "height": 250,
+    "mtime": 1600000000,
+    "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+    "size": 8359,
+    "name": "1.jpg",
+    "id": "1600000000 8359 1.jpg",
+    "root": "ROOT/media"
+  },
+  "1.mp4": {
+    "type": "video",
+    "video_length": 4.44,
+    "phash": 408042780191318620,
+    "width": 240,
+    "height": 180,
+    "mtime": 1600000000,
+    "partial_md5": "cfbce21cac56843b4ef5fe2bac5b15d8",
+    "size": 442877,
+    "name": "1.mp4",
+    "id": "1600000000 442877 1.mp4",
+    "root": "ROOT/media"
+  },
+  "3 broken.mp4": {
+    "type": "error",
+    "message": "Undefined type of ROOT/media/3 broken.mp4",
+    "mtime": 1600000000,
+    "size": 142130,
+    "name": "3 broken.mp4",
+    "id": "1600000000 142130 3 broken.mp4",
+    "root": "ROOT/media"
+  }
+}

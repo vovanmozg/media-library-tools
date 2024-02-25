@@ -9,3 +9,10 @@ def read_hash(file_name)
 rescue JSON::ParserError
   nil
 end
+
+def to_boolean(string)
+  return true if string == true || string == 'true'
+  return false if string == false || string == 'false'
+
+  raise ArgumentError.new("invalid value for Boolean: \"#{string}\"")
+end

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Level Directory Selector</title>
+  <script>
+    function directoryChanged(select) {
+      const path = select.value;
+      fetch('/folders?path=' + encodeURIComponent(path))
+        .then(response => response.json())
+        .then(data => {
+          select.innerHTML = ''; // Очистить текущий список
+          data.forEach(dir => {
+            let option = document.createElement('option');
+            option.selected = dir.path == path;
+            option.value = dir.path;
+            option.style = dir.ancestor ? "color: blue" : '';
+            option.textContent = dir.ancestor ? `> ${dir.name}` : dir.name;
+            select.appendChild(option);
+          });
+        });
+
+    }
+  </script>
+</head>
+<body>
+<h1>Parse meta</h1>
+<p>Please choose directory for scanning. Scanner recursively reads every picture
+  and video file, and saves information to json file. Name of file should be
+  passed as media_meta_path argument. It is relative path for data directory.</p>
+<pre>data_directory: /vt/data</pre>
+<form action="/read-meta" method="post">
+  <label for="media_dir">Directory for scanning:</label>
+  <select id="media_dir" name="media_dir" onchange="directoryChanged(this)">
+    <% @dir_options.each do |dir_option| %>
+      <option value="<%= dir_option[:path] %>" <%= dir_option[:disabled] ? 'disabled' : '' %>><%= dir_option[:path  ] %></option>
+    <% end %>
+  </select>
+  <br />
+
+  <label for="media_meta_path">Media meta path:</label>
+  <input type="text" name="media_meta_path" value="<%= @media_meta_path %>">
+  <br />
+
+  <input type="submit" value="Start">
+</form>
+</body>
+</html>

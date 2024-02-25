@@ -1,0 +1,3 @@
+class Immediately
+
+end

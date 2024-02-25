@@ -1,0 +1,14 @@
+{
+  "original.jpg": {
+    "type": "image",
+    "phash": 10787907979500066548,
+    "width": 250,
+    "height": 250,
+    "mtime": 1600000000,
+    "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+    "size": 8359,
+    "name": "original.jpg",
+    "id": "1600000000 8359 original.jpg",
+    "root": "ROOT/existing"
+  }
+}

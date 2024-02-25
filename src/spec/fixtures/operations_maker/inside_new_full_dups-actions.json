@@ -1,0 +1,37 @@
+{
+  "inside_new_full_dups": [
+    {
+      "type": "move",
+      "from": {
+        "type": "image",
+        "phash": 10993959375850113758,
+        "width": 900,
+        "height": 1600,
+        "mtime": 1455468752,
+        "partial_md5": "1df216df580dc76e0f879a95ce9d2eea",
+        "size": 140741,
+        "name": "3.jpg",
+        "id": "1455468752 140741 3.jpg",
+        "root": "/mnt/media",
+        "relative_path": "i-removed/1/2/3.jpg"
+      },
+      "to": {
+        "root": "/mnt/dups",
+        "relative_path": "new_inside_full_dups/i-removed/1/2/3.jpg"
+      },
+      "original": {
+        "type": "image",
+        "phash": 10993959375850113758,
+        "width": 900,
+        "height": 1600,
+        "mtime": 1455458185,
+        "partial_md5": "1df216df580dc76e0f879a95ce9d2eea",
+        "size": 140741,
+        "name": "original.jpg",
+        "id": "1455458185 140741 original.jpg",
+        "root": "/mnt/media",
+        "relative_path": "all/original.jpg"
+      }
+    }
+  ]
+}

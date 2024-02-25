@@ -38,9 +38,9 @@ class PHashImage
   def self.phash(file_name)
     # if extension is gif then convert to png first, and get phash from png file
     if File.extname(file_name) == '.gif'
-      png_file_name = '/tmp/temp.png'
-      `convert "#{file_name}" "#{png_file_name}"`
-      file_name = png_file_name
+      img_file_name = '/tmp/temp.jpg'
+      `convert "#{file_name}" "#{img_file_name}"`
+      file_name = img_file_name
     end
 
     suppress_phash_error do

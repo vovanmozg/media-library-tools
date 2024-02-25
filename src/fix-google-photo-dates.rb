@@ -3,6 +3,9 @@
 # This script fixes the dates of the photos and videos using metadata,
 # contained in json files, which are also downloaded from Google Takeout.
 
+# Example
+# docker run --rm --name media_tools -u=$UID:$UID -v /home/mediafiles:/app/media vovan/media_tools ruby ./fix-google-photo-dates.rb
+
 require 'json'
 require 'exif'
 require 'streamio-ffmpeg'

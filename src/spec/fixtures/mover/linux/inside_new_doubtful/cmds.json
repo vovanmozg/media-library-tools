@@ -1,0 +1,19 @@
+[
+  "# Summary:",
+  "#   Identical files inside new dir: 0",
+  "#   Similar files inside new dir: 0",
+  "#   Doubtful similar files inside new dir: 1",
+  "#   Files in new identical to existing: 0",
+  "#   Files in new similar to existing: 0",
+  "#   Broken files: 0",
+  "#   total: 1",
+  "#",
+  "# #########################################",
+  "# # Doubtful similar files inside new dir #",
+  "# #########################################",
+  "# original: /real/new/x/1.mp4 len: 57.91, 640x640 (ratio 1.0), size: 8464175, 2018-12-31 06:46:34",
+  "# dup: len: 59.048, 480x480 (ratio 1.0), size: 5708740, distance: 14, 2018-12-02 22:58:19",
+  "mkdir -p '/real/dups/new_inside_similar_doubtful/x'",
+  "mv '/real/new/x/2.mp4' '/real/dups/new_inside_similar_doubtful/x/2.mp4'",
+  ""
+]

@@ -1,0 +1,84 @@
+{
+  "inside_new_similar": [
+    {
+      "type": "move",
+      "from": {
+        "type": "image",
+        "phash": 10787907979500066548,
+        "width": 240,
+        "height": 240,
+        "mtime": 1600000000,
+        "partial_md5": "9cb4ab8cbfaad8b7237e150531c6aa1c",
+        "size": 17914,
+        "name": "smaller.jpg",
+        "id": "1600000000 17914 smaller.jpg",
+        "root": "ROOT/new",
+        "relative_path": "one/smaller.jpg",
+        "ratio": 1.0,
+        "real_root": "REAL/new"
+      },
+      "to": {
+        "root": "ROOT/dups",
+        "relative_path": "new_inside_similar/one/smaller.jpg",
+        "distance": 0,
+        "real_root": "REAL/dups"
+      },
+      "original": {
+        "type": "image",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "mtime": 1600000000,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "name": "exactly.jpg",
+        "id": "1600000000 8359 exactly.jpg",
+        "root": "ROOT/new",
+        "relative_path": "exactly.jpg",
+        "ratio": 1.0,
+        "real_root": "REAL/new"
+      }
+    }
+  ],
+  "full_dups": [
+    {
+      "type": "move",
+      "from": {
+        "type": "image",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "mtime": 1600000000,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "name": "exactly.jpg",
+        "id": "1600000000 8359 exactly.jpg",
+        "root": "ROOT/new",
+        "relative_path": "exactly.jpg",
+        "ratio": 1.0,
+        "real_root": "REAL/new"
+      },
+      "to": {
+        "root": "ROOT/dups",
+        "relative_path": "full_dups/exactly.jpg",
+        "distance": 0,
+        "real_root": "REAL/dups"
+      },
+      "original": {
+        "type": "image",
+        "phash": 10787907979500066548,
+        "width": 250,
+        "height": 250,
+        "mtime": 1600000000,
+        "partial_md5": "63f3c713a01010bbcafdfafa3d688566",
+        "size": 8359,
+        "name": "original.jpg",
+        "id": "1600000000 8359 original.jpg",
+        "root": "ROOT/existing",
+        "relative_path": "original.jpg",
+        "ratio": 1.0,
+        "real_root": "REAL/existing"
+      }
+    }
+  ]
+}
