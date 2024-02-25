@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProcessInsideNewFullDups
   # DUPS_DIR = 'define_your_dir_here'
   # NEW_FILES_DIR = 'define_your_dir_here'
@@ -15,7 +17,7 @@ class ProcessInsideNewFullDups
     [
       action_groups,
       processed_files,
-      error_files,
+      error_files
     ]
   end
 
@@ -59,7 +61,7 @@ class ProcessInsideNewFullDups
       # За оригинал примем файл с самым длинным имене файла. Это объясняется тем
       # что если имя файла длиннее, значит оно более информативное и лучше его
       # использовать как оригинал (хотя это не всегда так)
-      best_match = oldest_files.max_by { |file_name| file_name.size }
+      best_match = oldest_files.max_by(&:size)
 
       # Остальные нужно пометить как дубликаты
       files.each do |file_name|
@@ -78,7 +80,7 @@ class ProcessInsideNewFullDups
       # Файлы, для которых нужно сформировать команды перемещения
       new_inside_full_dups,
       # Файлы, которые не удалось обработать
-      error_files,
+      error_files
     ]
   end
 
@@ -92,7 +94,7 @@ class ProcessInsideNewFullDups
 
     new_inside_full_dups.each do |relative_path, groups|
       root_dups_dir = File.join(@dups_dir, 'new_inside_full_dups')
-      new_file_name = relative_path.to_s.gsub(@new_dir, root_dups_dir)
+      relative_path.to_s.gsub(@new_dir, root_dups_dir)
       actions << {
         type: 'move',
         from: data[relative_path].merge(
@@ -104,7 +106,7 @@ class ProcessInsideNewFullDups
         },
         original: data[groups[:original]].merge(
           relative_path: groups[:original].to_s
-        ),
+        )
       }
     end
 

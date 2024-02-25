@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './lib/comparator/process_similar'
 require './lib/log'

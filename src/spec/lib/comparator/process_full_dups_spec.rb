@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require './spec/spec_helper'
 require './lib/comparator/process_full_dups'

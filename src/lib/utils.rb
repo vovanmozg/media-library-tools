@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 require 'zlib'
 
@@ -11,8 +13,8 @@ rescue JSON::ParserError
 end
 
 def to_boolean(string)
-  return true if string == true || string == 'true'
-  return false if string == false || string == 'false'
+  return true if [true, 'true'].include?(string)
+  return false if [false, 'false'].include?(string)
 
-  raise ArgumentError.new("invalid value for Boolean: \"#{string}\"")
+  raise ArgumentError, "invalid value for Boolean: \"#{string}\""
 end

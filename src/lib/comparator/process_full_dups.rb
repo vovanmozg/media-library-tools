@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProcessFullDups
   def initialize(new_dir, existing_dir, dups_dir, log)
     @new_dir = new_dir
@@ -108,9 +110,7 @@ class ProcessFullDups
   def compare(new_data, existing_by_md5)
     full_dups = {}
     new_data.each do |new_file, new_file_info|
-      if existing_by_md5.key?(new_file_info[:partial_md5])
-        full_dups[new_file] = new_file_info
-      end
+      full_dups[new_file] = new_file_info if existing_by_md5.key?(new_file_info[:partial_md5])
     end
     full_dups
   end

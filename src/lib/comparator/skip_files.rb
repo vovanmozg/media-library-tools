@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SkipFiles
   def initialize(new_dir, dups_dir)
     @new_dir = new_dir
@@ -20,21 +22,21 @@ class SkipFiles
         actions << {
           type: :wrong_width_or_height,
           from: file_info.merge(relative_path: relative_path.to_s, root: @new_dir),
-          to: { root: @dups_dir, relative_path: File.join('new_broken', relative_path.to_s) },
+          to: { root: @dups_dir, relative_path: File.join('new_broken', relative_path.to_s) }
         }
         next
       end
 
-      if file_info[:type] == 'video' && (file_info[:video_length] == 0 || file_info[:video_length].nil?)
-        bad << relative_path
+      next unless file_info[:type] == 'video' && ((file_info[:video_length]).zero? || file_info[:video_length].nil?)
 
-        actions << {
-          type: :wrong_length,
-          from: file_info.merge(relative_path: relative_path.to_s),
-          to: { root: @new_broken_dir, relative_path: relative_path.to_s }
-        }
-        next
-      end
+      bad << relative_path
+
+      actions << {
+        type: :wrong_length,
+        from: file_info.merge(relative_path: relative_path.to_s),
+        to: { root: @new_broken_dir, relative_path: relative_path.to_s }
+      }
+      next
     end
 
     [bad, { skipped: actions }]

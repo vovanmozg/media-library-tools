@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Группирует похожие файлы по кластерам.
 # Например f1 похож на f2, f2 похож на f3, f4 похож на f5, f6 похож на f7.
 # Тогда будет определено 3 кластера: [f1, f2, f3], [f4, f5], [f6, f7].
@@ -20,10 +22,8 @@ class GroupFNames
     visited = {}
     clusters = []
 
-    graph.keys.each do |node|
-      unless visited[node]
-        clusters << dfs(node, graph, visited, [])
-      end
+    graph.each_key do |node|
+      clusters << dfs(node, graph, visited, []) unless visited[node]
     end
 
     clusters

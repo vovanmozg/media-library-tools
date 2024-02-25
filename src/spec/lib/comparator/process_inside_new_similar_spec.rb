@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './lib/comparator/process_inside_new_similar'
 require './lib/log'
@@ -22,7 +24,7 @@ describe ProcessInsideNewSimilar do
           name: '1.jpg'
         }
       }
-      _, new_inside_full_dups, _ = subject.send(:dups_groups, data)
+      _, new_inside_full_dups, = subject.send(:dups_groups, data)
 
       expected = {
         'x/1.jpg' => {
@@ -66,7 +68,7 @@ describe ProcessInsideNewSimilar do
         type: 'move',
         original: image2.merge(relative_path: 'x/2.jpg'),
         from: image1.merge(relative_path: 'x/1.jpg'),
-        to: { root: '/dups', relative_path: 'new_inside_similar/x/1.jpg' },
+        to: { root: '/dups', relative_path: 'new_inside_similar/x/1.jpg' }
       ]
     }
 
@@ -102,5 +104,3 @@ describe ProcessInsideNewSimilar do
   #   expect(new_inside_full_dups).to eq(expected)
   # end
 end
-
-

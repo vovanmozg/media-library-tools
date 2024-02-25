@@ -28,7 +28,7 @@ class MetaReader
   end
 
   def call
-    @dir_reader.parse_files(dir: @media_dir, meta_path: @meta_path, data_dir: @data_dir, cache: false, invalidate_cache: true)
+    @dir_reader.parse_files(dir: @media_dir, meta_path: @meta_path, data_dir: @data_dir, cache: false,
+                            invalidate_cache: true)
   end
 end
-

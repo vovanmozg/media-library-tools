@@ -1,15 +1,18 @@
+# frozen_string_literal: true
+
 class Mover
   class ShortMeta
-
     # Формирует строку с метаинформацией о файле: длина, соотношение сторон, размеры
     def short_meta(file_info, file_info_to = nil)
       output = []
 
       output << "len: #{file_info[:video_length]}" if file_info[:video_length]
-      output << "#{file_info[:width]}x#{file_info[:height]} (ratio #{file_info[:ratio]}), size: #{file_info[:size]}" if file_info[:ratio]
+      if file_info[:ratio]
+        output << "#{file_info[:width]}x#{file_info[:height]} (ratio #{file_info[:ratio]}), size: #{file_info[:size]}"
+      end
       output << "distance: #{file_info_to[:distance]}" if file_info_to
-      output << "#{Time.at(file_info[:mtime]).strftime('%Y-%m-%d %H:%M:%S')}"
-      return output.join(', ')
+      output << Time.at(file_info[:mtime]).strftime('%Y-%m-%d %H:%M:%S').to_s
+      output.join(', ')
       #
       # return 'kuku short meta'
       # output = []

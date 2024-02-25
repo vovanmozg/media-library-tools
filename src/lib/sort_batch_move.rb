@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SortBatchMove
   FM = FileMagic.new
   OPERATION_MAP = {
@@ -8,8 +10,8 @@ class SortBatchMove
     'documents' => 'nofoto/documents',
     'alien' => 'alien',
     'archive' => 'archive',
-    'non-sorted' => 'non-sorted',
-  }
+    'non-sorted' => 'non-sorted'
+  }.freeze
 
   def call(moving_actions, config)
     @config = config
@@ -28,7 +30,8 @@ class SortBatchMove
     operations = []
 
     if OPERATION_MAP[action][:original]
-      operations << { source: item['original']['full_path'], action: 'original', destination: OPERATION_MAP[action][:original] }
+      operations << { source: item['original']['full_path'], action: 'original',
+                      destination: OPERATION_MAP[action][:original] }
     end
 
     if OPERATION_MAP[action][:dup]
@@ -71,7 +74,7 @@ class SortBatchMove
   end
 
   def find_item_by_to(data, to)
-    data.each do |key, value|
+    data.each_value do |value|
       value.each do |item|
         return item if item['to'] == to
       end

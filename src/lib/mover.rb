@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 
 require_relative 'mover/linux'
@@ -10,7 +12,7 @@ require_relative 'mover/linux/full_dups'
 require_relative 'mover/linux/similar'
 
 class Mover
-  PATH_REPLACING_DIRS = [:existing_dir, :new_dir, :dups_dir]
+  PATH_REPLACING_DIRS = %i[existing_dir new_dir dups_dir].freeze
 
   def initialize(settings: {})
     @settings = {
@@ -32,7 +34,8 @@ class Mover
   def call(operations: nil, errors: [])
     cmds = []
     if operations.nil?
-      operations = JSON.parse(File.read(File.join(@settings[:data_dir], @settings[:operations_file])), symbolize_names: true)
+      operations = JSON.parse(File.read(File.join(@settings[:data_dir], @settings[:operations_file])),
+                              symbolize_names: true)
     end
 
     cmds += @driver_type.headers(operations)

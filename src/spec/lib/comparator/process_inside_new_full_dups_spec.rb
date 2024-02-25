@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './lib/comparator/process_inside_new_full_dups'
 require './lib/log'
@@ -24,7 +26,7 @@ describe ProcessInsideNewFullDups do
     end
 
     it 'returns one file in new_inside_full_dups' do
-      _, new_inside_full_dups, _ = subject.send(:dups_groups, data)
+      _, new_inside_full_dups, = subject.send(:dups_groups, data)
 
       expected = {
         'x/1.jpg' => {
@@ -35,7 +37,7 @@ describe ProcessInsideNewFullDups do
     end
 
     it 'returns one processed file' do
-      processed_files, _, _ = subject.send(:dups_groups, data)
+      processed_files, = subject.send(:dups_groups, data)
       expect(processed_files).to eq(['x/1.jpg'])
     end
 
@@ -58,7 +60,7 @@ describe ProcessInsideNewFullDups do
         }
       }
       _, _, error_files = subject.send(:dups_groups, data)
-      expect(error_files).to eq(["x/1 identical.jpg", "x/1.jpg"])
+      expect(error_files).to eq(['x/1 identical.jpg', 'x/1.jpg'])
     end
   end
 
@@ -98,7 +100,7 @@ describe ProcessInsideNewFullDups do
           type: 'move',
           from: image2.merge(relative_path: 'x/1.jpg'),
           to: { root: '/dups', relative_path: 'new_inside_full_dups/x/1.jpg' },
-          original: image1.merge(relative_path: 'x/1 identical.jpg'),
+          original: image1.merge(relative_path: 'x/1 identical.jpg')
         }
       ]
     }
@@ -144,7 +146,7 @@ describe ProcessInsideNewFullDups do
           type: 'move',
           from: image1.merge(relative_path: 'x/1-1.jpg'),
           to: { root: '/dups', relative_path: 'new_inside_full_dups/x/1-1.jpg' },
-          original: image2.merge(relative_path: 'x/1-2.jpg'),
+          original: image2.merge(relative_path: 'x/1-2.jpg')
         }
       ]
     }

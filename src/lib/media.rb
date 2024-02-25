@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require './lib/cache'
 require './lib/phash'
 require './lib/invalidate_cache'
 
 class Media
   # We don't want to process files with specific data
-  SKIP_TYPES = ['JSON data']
+  SKIP_TYPES = ['JSON data'].freeze
 
   def initialize(cache_dir, log)
     @cache_dir = cache_dir
@@ -23,7 +25,7 @@ class Media
       InvalidateCache.new.call(info, file_name, type, @cache_dir, @log)
       yield :files_from_cache if block_given?
     else
-      @log.debug("Not in cache")
+      @log.debug('Not in cache')
       yield :files_missing_in_cache if block_given?
     end
 
@@ -57,22 +59,20 @@ class Media
       message: message
     }
   rescue UnknownPhashError => e
-    if e.message == 'Unknown pHash error'
-      @log.error("#{e.message} for #{file_name}".red)
-      {
-        type: 'error',
-        message: e.message
-      }
-    else
-      raise e
-    end
+    raise e unless e.message == 'Unknown pHash error'
+
+    @log.error("#{e.message} for #{file_name}".red)
+    {
+      type: 'error',
+      message: e.message
+    }
   end
 
   private
 
   # TODO: move куда нибудь
   def calculate_partial_md5(filename)
-    chunk = IO.read(filename, 16384)
+    chunk = IO.read(filename, 16_384)
     raise FileReadingError if chunk.nil?
 
     Digest::MD5.hexdigest(chunk)

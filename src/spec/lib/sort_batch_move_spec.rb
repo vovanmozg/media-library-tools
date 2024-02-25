@@ -20,7 +20,6 @@ describe SortBatchMove do
     expect(result).to eq(["File does not exist: #{@root}/new/тест/1.jpg, destination:#{@root}/data/foto/тест/1.jpg<br>"])
   end
 
-
   context 'when file exists' do
     before do
       FileUtils.mkdir_p("#{@root}/new/тест")

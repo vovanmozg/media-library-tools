@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Три нижние строки комментария сомнительны
 # Проверяет, есть ли в новых файлах дубликаты, которые уже есть в старых файлах.
 # Если есть, то перемещает их в директорию для дубликатов.
@@ -26,19 +28,14 @@ class CacheMeta
     @invalidate = invalidate
     counters = Counters.new(:all, @data_dir)
     @dir_reader.scan_files(@media_dir) do |file_name|
-      if LOG.level == Logger::INFO
-        print '.'
-      end
+      print '.' if LOG.level == Logger::INFO
       update_cache(file_name) do |event|
         counters.increase(event)
       end
     end
   end
 
-  def update_cache(file_name)
-    @media.read_file!(file_name, FileMagic.new, @invalidate) do |event|
-      yield event
-    end
+  def update_cache(file_name, &block)
+    @media.read_file!(file_name, FileMagic.new, @invalidate, &block)
   end
 end
-

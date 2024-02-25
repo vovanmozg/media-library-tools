@@ -17,4 +17,3 @@ class Mover::Windows
     '::'
   end
 end
-

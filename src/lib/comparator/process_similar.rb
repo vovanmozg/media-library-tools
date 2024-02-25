@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProcessSimilar
   def initialize(new_dir, existing_dir, dups_dir, log)
     @new_dir = new_dir
@@ -26,7 +28,7 @@ class ProcessSimilar
       actions << {
         type: 'move',
         from: file_info.merge(relative_path: relative_path.to_s),
-        to: { root: @dups_dir, relative_path: File.join('similar', relative_path.to_s)},
+        to: { root: @dups_dir, relative_path: File.join('similar', relative_path.to_s) },
         original: existing_by_phash[file_info[:phash]][original_file].merge(relative_path: original_file.to_s)
       }
 
@@ -101,9 +103,7 @@ class ProcessSimilar
   def compare_exact(new_data, existing_by_phash)
     similar = {}
     new_data.each do |new_file, new_file_info|
-      if existing_by_phash.key?(new_file_info[:phash])
-        similar[new_file] = new_file_info
-      end
+      similar[new_file] = new_file_info if existing_by_phash.key?(new_file_info[:phash])
     end
     similar
   end

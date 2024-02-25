@@ -7,14 +7,13 @@ class OperationsConverter
     @settings = {
       data_dir: '/vt/data', # path (inside docker) to directory with application data and cache files
       operations_file: 'operations.json',
-      command_file: 'commands.sh.txt',
+      command_file: 'commands.sh.txt'
     }.merge(settings)
   end
 
   def call
     fn = File.join(@settings[:data_dir], @settings[:operations_file])
     operations = JSON.parse(File.read(fn), symbolize_names: true)
-
 
     cmds = ToCmds.new(dirs: @settings, system: @system).process(
       actions_groups: operations
@@ -30,7 +29,7 @@ class OperationsConverter
     #   errors: errors
     # )
 
-    #write_commands_file(cmds)
+    # write_commands_file(cmds)
     cmds
   end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'sinatra/base'
 require 'find'
 require 'json'
@@ -64,7 +66,7 @@ class MyApp < Sinatra::Base
   end
 
   get '/sort' do
-    items_count = params['items_count'].to_i > 0 ? params['items_count'].to_i : 50
+    items_count = params['items_count'].to_i.positive? ? params['items_count'].to_i : 50
     @media_items = Sort::Index.new.call(items_count)
     @log = read_move_log
     erb :'sort/index'
@@ -76,7 +78,7 @@ class MyApp < Sinatra::Base
   end
 
   get '/image' do
-    result = Images::Show.new.call(params['path'], params.has_key?('x'), DATA_DIR)
+    result = Images::Show.new.call(params['path'], params.key?('x'), DATA_DIR)
     if result[:type] == :content
       content_type 'image/jpeg'
       result[:data]
@@ -138,14 +140,14 @@ class MyApp < Sinatra::Base
       real_existing_dir: params[:real_existing_dir],
       new_dir: params[:new_dir],
       real_new_dir: params[:real_new_dir],
-      real_dups_dir: params[:real_dups_dir],
+      real_dups_dir: params[:real_dups_dir]
     ).call
 
     redirect '/folder-compare'
   end
 
   get '/read-meta' do
-    @dir_options = DirectoryOptionsBuilder.new.call("/vt")
+    @dir_options = DirectoryOptionsBuilder.new.call('/vt')
     erb :'read-meta/index'
   end
 
@@ -156,7 +158,6 @@ class MyApp < Sinatra::Base
     DirectoryOptionsBuilder.new.call(base_path).to_json
   end
 
-
   def list_directory_contents(path)
     Dir.entries(path).reject { |entry| entry.start_with? '.' }.map do |entry|
       full_path = File.join(path, entry)
@@ -165,7 +166,7 @@ class MyApp < Sinatra::Base
   end
 
   # Запуск приложения
-  if app_file == $0
+  if app_file == $PROGRAM_NAME
     set :bind, '0.0.0.0'
     set :port, 4567
     run!

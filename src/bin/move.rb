@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 require 'optparse'
 require './lib/mover'
-
 
 options = {}
 parser = OptionParser.new do |opts|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/batch_move'
 require './config/constants'
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './operations_maker'
 
@@ -37,7 +39,6 @@ describe OperationsMaker do
     expect(actual).to match(expected)
   end
 
-
   describe '#normalize' do
     it 'does not convert for linux end empty dirs' do
       converter = described_class.new(settings: { system: :linux })
@@ -71,6 +72,5 @@ describe OperationsMaker do
       actual = converter.send(:normalize, '/dups')
       expect(actual).to eq('C:\\dups')
     end
-
   end
 end

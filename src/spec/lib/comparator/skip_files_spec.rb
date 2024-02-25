@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './lib/comparator/skip_files'
 
@@ -34,8 +36,8 @@ describe SkipFiles do
     expect(skipped_files).to eq(['x/1.mp4'])
     expected = [
       {
-        from: { type: 'video', width: 250, height: 250, relative_path: "x/1.mp4" },
-        to: { root: "/dups/new_broken", relative_path: "x/1.mp4" },
+        from: { type: 'video', width: 250, height: 250, relative_path: 'x/1.mp4' },
+        to: { root: '/dups/new_broken', relative_path: 'x/1.mp4' },
         type: :wrong_length
       }
     ]

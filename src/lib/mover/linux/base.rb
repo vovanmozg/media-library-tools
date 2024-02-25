@@ -1,20 +1,18 @@
+# frozen_string_literal: true
+
 class Mover
   class Linux
     class ToCmds
       class Base < Mover::Commands::ToCmds::Base
-
-
         private
-
-
 
         def mkdir_win_cmds(dir, real_dir)
           cmds = []
-          relative = dir.gsub(real_dir, '').split('\\')[1..-1]
+          relative = dir.gsub(real_dir, '').split('\\')[1..]
           path = real_dir
           relative.each do |dir|
             path = File.join(path, dir).gsub('/', '\\')
-            cmds << %Q(if not exist "#{path}" mkdir "#{path}")
+            cmds << %(if not exist "#{path}" mkdir "#{path}")
           end
           cmds
         end

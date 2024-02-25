@@ -50,4 +50,3 @@ class Explorer::Index
     end
   end
 end
-

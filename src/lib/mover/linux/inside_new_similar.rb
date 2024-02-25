@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/mover/commands'
 require './lib/mover/commands/inside_new_similar'
 require_relative 'comments'

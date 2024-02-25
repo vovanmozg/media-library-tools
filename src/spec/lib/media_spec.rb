@@ -52,7 +52,8 @@ describe Media do
       FileUtils.touch("#{@root}/media/1.mp4", mtime: 1_600_000_000)
       cache_file = "#{@root}/cache/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json"
       FileUtils.mkdir_p("#{@root}/cache/phash/fc")
-      FileUtils.cp('./spec/fixtures/media/missing_attributes/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json', cache_file)
+      FileUtils.cp('./spec/fixtures/media/missing_attributes/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json',
+                   cache_file)
 
       subject.read_file!(media_file, FileMagic.new)
 
@@ -113,7 +114,7 @@ describe Media do
 
     it 'second read_file! returns meta from cache' do
       FileUtils.touch(media_file, mtime: 1_600_000_000)
-      subject.read_file!(media_file,  FileMagic.new)
+      subject.read_file!(media_file, FileMagic.new)
       meta = subject.read_file!(media_file, FileMagic.new)
       expect(meta).to eq(expected)
     end

@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'logger'
 require './lib/utils'
 
-LOG = Logger.new(STDOUT)
+LOG = Logger.new($stdout)
 LOG.level = (ENV['LOG_LEVEL'] && Object.const_get(ENV['LOG_LEVEL'])) || Logger::DEBUG
-
 
 # счетчики для записи в файл. Скрипт стандартно ничего не выводит в stdout,
 # поэтому для отслеживания прогресса можно смотреть в файл.
@@ -37,8 +38,8 @@ class Counters
 
   def init_counters
     @@instances_created += 1
-    if @@instances_created == 1
-      save_progress({})
-    end
+    return unless @@instances_created == 1
+
+    save_progress({})
   end
 end

@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
-require './meta_reader.rb'
+require './meta_reader'
 
 describe MetaReader do
   it 'creates one cache file with all files metas' do
@@ -20,7 +22,7 @@ describe MetaReader do
     ).call
 
     expected = jf('./spec/fixtures/meta_reader/files.json')
-    actual = jf("/data/files.json", @root)
+    actual = jf('/data/files.json', @root)
     expect(actual).to eq(expected)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mover
   class Linux
     def self.headers(actions_groups)
@@ -11,7 +13,7 @@ class Mover
       cmds << "#{comment}   Files in new similar to existing: #{actions_groups[:similar]&.size || 0}"
       cmds << "#{comment}   Broken files: #{actions_groups[:skipped]&.size || 0}"
       cmds << "#{comment}   total: #{actions_groups.values.flatten.size || 0}"
-      cmds << "#{comment}"
+      cmds << comment.to_s
     end
 
     def self.comment
@@ -29,5 +31,4 @@ class Mover
       )
     end
   end
-
 end

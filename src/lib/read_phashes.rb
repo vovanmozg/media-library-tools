@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Читает все файлы и сохраняет hpash и имя файла в файл phashes.txt
 
 require 'json'

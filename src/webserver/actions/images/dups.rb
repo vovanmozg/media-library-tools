@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require 'phashion'
 
 class Images; end
 class Images::Dups
-
   # @param [Hash] image { filename: 'path', phash: 'phash' }
   def find(image, threshold = 15)
     @data = Phashes::Index.new(DATA_DIR).call

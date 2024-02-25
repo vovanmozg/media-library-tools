@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProcessInsideNewSimilar
   def initialize(new_dir, dups_dir, log)
     @new_dir = new_dir
@@ -12,7 +14,7 @@ class ProcessInsideNewSimilar
     [
       action_groups,
       processed_files,
-      error_files,
+      error_files
     ]
   end
 
@@ -34,10 +36,9 @@ class ProcessInsideNewSimilar
     error_files = []
     new_inside_full_dups = {}
 
-    by_md5.each do |md5, files_infos|
+    by_md5.each_value do |files_infos|
       files = files_infos.to_h.keys
       next if files.count < 2
-
 
       # Определить элемент у которого самое большое разрешение
       max_resolution_item = max_dimensions_item(files, data)
@@ -60,7 +61,7 @@ class ProcessInsideNewSimilar
       # За оригинал примем файл с самым длинным имене файла. Это объясняется тем
       # что если имя файла длиннее, значит оно более информативное и лучше его
       # использовать как оригинал (хотя это не всегда так)
-      best_match = oldest_files.max_by { |file_name| file_name.size }
+      best_match = oldest_files.max_by(&:size)
 
       # Остальные нужно пометить как дубликаты
       files.each do |file_name|
@@ -79,7 +80,7 @@ class ProcessInsideNewSimilar
       # Файлы, для которых нужно сформировать команды перемещения
       new_inside_full_dups,
       # Файлы, которые не удалось обработать
-      error_files,
+      error_files
     ]
   end
 
@@ -98,7 +99,7 @@ class ProcessInsideNewSimilar
         },
         original: data[groups[:original]].merge(
           relative_path: groups[:original].to_s
-        ),
+        )
       }
     end
 

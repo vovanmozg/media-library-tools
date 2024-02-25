@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Проверить насколько уникальным будет ID сформированный из
 # - имени файла (без пути)
 # - размера файла
@@ -18,13 +20,11 @@ require 'digest'
 require 'pry-byebug'
 require './lib/utils'
 
-def scan_files(dir_name)
-  pattern =  File.join(dir_name, "**/**")
+def scan_files(dir_name, &block)
+  pattern = File.join(dir_name, '**/**')
   files = Dir.glob(pattern).reject { |x| File.directory?(x) }
 
-  files.each do |file_name|
-    yield file_name
-  end
+  files.each(&block)
 end
 
 class Fast
@@ -70,7 +70,7 @@ class Md5
   end
 
   def calculate_partial_md5(filename)
-    chunk = IO.read(filename, 16384)
+    chunk = IO.read(filename, 16_384)
     raise FileReadingError if chunk.nil?
 
     Digest::MD5.hexdigest(chunk)
@@ -81,5 +81,3 @@ Benchmark.bm(3) do |x|
   x.report { Fast.new('/vt/media').call }
   x.report { Md5.new('/vt/media').call }
 end
-
-

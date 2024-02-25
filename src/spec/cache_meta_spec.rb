@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
-require './cache_meta.rb'
+require './cache_meta'
 
 describe CacheMeta do
   it 'creates cache files' do
@@ -18,7 +20,7 @@ describe CacheMeta do
     expected = [
       "#{cache_dir}/phash/4f/4fa07c3b7dd592da690622e66d782368.json",
       "#{cache_dir}/phash/84/84c123ac6279034cb1131ef78bc37c59.json",
-      "#{cache_dir}/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json",
+      "#{cache_dir}/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json"
       # "#{cache_dir}/progress.json"
     ]
     expect(cache_files).to eq(expected)

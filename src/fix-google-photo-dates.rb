@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # You can download all photos and vides from google photo using Google Takeout.
 # The problem is that the dates of the photos and videos are not correct.
 # This script fixes the dates of the photos and videos using metadata,
@@ -46,7 +48,7 @@ def get_time(file_name)
 end
 
 def get_time_from_json(file_name)
-  json_file_name = file_name + '.json'
+  json_file_name = "#{file_name}.json"
 
   return nil unless File.exist?(json_file_name)
 
@@ -135,8 +137,8 @@ end
 # We assume that if the timestamp of the photos indicates a year before 1980,
 # then something is wrong with the timestamp
 def timestamp?(ts)
-  ts1980 = 315532800
-  ts2100 = 4102444800
+  ts1980 = 315_532_800
+  ts2100 = 4_102_444_800
   ts = ts.to_s
   /^\d+$/.match?(ts) && ts.to_i > ts1980 && ts.to_i < ts2100
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/mover/commands'
 require './lib/mover/commands/full_dups'
 require_relative 'comments'

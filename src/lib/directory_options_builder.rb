@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class DirectoryOptionsBuilder
-  def call(base_path, prefix = "")
+  def call(base_path, prefix = '')
     options = []
     parent_options = []
 
@@ -16,11 +18,10 @@ class DirectoryOptionsBuilder
     options += parent_options.reverse
 
     Dir.entries(base_path).sort.each do |entry|
-      next if entry == '.' || entry == '..'
+      next if ['.', '..'].include?(entry)
+
       full_path = File.join(base_path, entry)
-      if File.directory?(full_path)
-        options << { name: "#{prefix}#{entry}", path: full_path }
-      end
+      options << { name: "#{prefix}#{entry}", path: full_path } if File.directory?(full_path)
     end
     options
   end

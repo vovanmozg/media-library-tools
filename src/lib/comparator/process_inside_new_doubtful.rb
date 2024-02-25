@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/phash'
 require './lib/group_fnames'
 require './lib/media'
@@ -41,7 +43,6 @@ class ProcessInsideNewDoubtful
     # в разном порядке.
     action_groups = {}
 
-
     # doubtful_clusters = GroupFNames.new.clusters(doubtful)
     action_groups[:inside_new_doubtful], processed_files = generate_actions(doubtful, data, [])
 
@@ -49,7 +50,7 @@ class ProcessInsideNewDoubtful
     [
       action_groups,
       processed_files,
-      error_files,
+      error_files
     ]
   end
 
@@ -59,9 +60,7 @@ class ProcessInsideNewDoubtful
     scanned_files = {}
 
     files.each do |key, dups|
-      if scanned_files[key]
-        next
-      end
+      next if scanned_files[key]
 
       cluster = dups + [key] - already_processed_files
 
@@ -90,7 +89,7 @@ class ProcessInsideNewDoubtful
       # За оригинал примем файл с самым длинным имене файла. Это объясняется тем
       # что если имя файла длиннее, значит оно более информативное и лучше его
       # использовать как оригинал (хотя это не всегда так)
-      best = oldest_files.max_by { |file_name| file_name.size }
+      best = oldest_files.max_by(&:size)
 
       cluster.each do |file_name|
         next if scanned_files[file_name]
@@ -105,9 +104,8 @@ class ProcessInsideNewDoubtful
           type: 'move',
           from: data[file_name].merge(relative_path: file_name.to_s),
           to: { root: @dups_dir, relative_path: File.join('new_inside_doubtful', file_name.to_s) },
-          original: data[best].merge(relative_path: best.to_s),
+          original: data[best].merge(relative_path: best.to_s)
         }
-
       end
     end
 

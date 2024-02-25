@@ -15,42 +15,42 @@ describe BatchMove do
 
   let(:data) do
     {
-      "inside_new_full_dups" => [
+      'inside_new_full_dups' => [
         {
-          "type" => 'move',
-          "from" => {
-            "type" => 'image',
-            "phash" => 17_980_308_530_390_437_417,
-            "width" => 1280,
-            "height" => 835,
-            "mtime" => 1_653_685_214,
-            "partial_md5" => '9ee4ef18e92784a6eb7379875158b6c7',
-            "size" => 192_453,
-            "name" => 'dup.jpg',
-            "id" => '1653685214 192453 dup.jpg',
-            "full_path" => "#{@root}/new/wai/dup.jpg"
+          'type' => 'move',
+          'from' => {
+            'type' => 'image',
+            'phash' => 17_980_308_530_390_437_417,
+            'width' => 1280,
+            'height' => 835,
+            'mtime' => 1_653_685_214,
+            'partial_md5' => '9ee4ef18e92784a6eb7379875158b6c7',
+            'size' => 192_453,
+            'name' => 'dup.jpg',
+            'id' => '1653685214 192453 dup.jpg',
+            'full_path' => "#{@root}/new/wai/dup.jpg"
           },
-          "to" => "#{@root}/dups/new_inside_full_dups/wai/original.jpg",
-          "original" => {
-            "type" => 'image',
-            "phash" => 17_980_308_530_390_437_417,
-            "width" => 1280,
-            "height" => 835,
-            "mtime" => 1_653_685_214,
-            "partial_md5" => '9ee4ef18e92784a6eb7379875158b6c7',
-            "size" => 192_453,
-            "name" => 'original.jpg',
-            "id" => '1653685214 192453 original.jpg',
-            "full_path" => "#{@root}/new/wai/original.jpg",
-            "real_path" => '/home/vp/Pictures/pocox3-2023-08-30/in/wai/original.jpg',
-            "date" => '2022-05-27 21 =>00 =>14',
-            "ratio" => 1.5
+          'to' => "#{@root}/dups/new_inside_full_dups/wai/original.jpg",
+          'original' => {
+            'type' => 'image',
+            'phash' => 17_980_308_530_390_437_417,
+            'width' => 1280,
+            'height' => 835,
+            'mtime' => 1_653_685_214,
+            'partial_md5' => '9ee4ef18e92784a6eb7379875158b6c7',
+            'size' => 192_453,
+            'name' => 'original.jpg',
+            'id' => '1653685214 192453 original.jpg',
+            'full_path' => "#{@root}/new/wai/original.jpg",
+            'real_path' => '/home/vp/Pictures/pocox3-2023-08-30/in/wai/original.jpg',
+            'date' => '2022-05-27 21 =>00 =>14',
+            'ratio' => 1.5
           },
-          "dup" => {
-            "distance" => 0,
-            "date" => '2022-05-27 21 =>00 =>14',
-            "ratio" => 1.5,
-            "real_path" => '/home/vp/Pictures/pocox3-2023-08-30/dups/new_inside_full_dups/wai/original.jpg'
+          'dup' => {
+            'distance' => 0,
+            'date' => '2022-05-27 21 =>00 =>14',
+            'ratio' => 1.5,
+            'real_path' => '/home/vp/Pictures/pocox3-2023-08-30/dups/new_inside_full_dups/wai/original.jpg'
           }
         }
       ]
@@ -132,6 +132,5 @@ describe BatchMove do
         expect(result).to eq(expected)
       end
     end
-
   end
 end

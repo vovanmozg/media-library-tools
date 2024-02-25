@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Mover
   class Commands
     class ToCmds
@@ -21,12 +23,11 @@ class Mover
 
         def header
           [
-            "#{comment} #{('#' * (header_title.length + 4))}",
+            "#{comment} #{'#' * (header_title.length + 4)}",
             "#{comment} # #{header_title} #",
-            "#{comment} #{('#' * (header_title.length + 4))}",
+            "#{comment} #{'#' * (header_title.length + 4)}"
           ]
         end
-
       end
     end
   end
@@ -34,8 +35,6 @@ end
 
 class ToCmds
   class Base
-
-
     def handle_move(action)
       from = action[:from][:full_path]
       to = action[:to]
@@ -48,27 +47,25 @@ class ToCmds
         cmds << "# dup: #{ToCmds.short_meta(action[:from], action[:original], system: @system)}"
         cmds << "mkdir -p '#{File.dirname(to)}'"
         cmds << "mv '#{from}' '#{to}'"
-        cmds << ''
-        cmds
       else
         cmds << ":: original: #{original} #{ToCmds.short_meta(action[:original], system: @system)}"
         cmds << ":: dup: #{ToCmds.short_meta(action[:from], action[:original], system: @system)}"
         # dir_to = normalize(File.dirname(action[:to]))
         dir_to = File.dirname(action[:to])
         cmds += mkdir_win_cmds(dir_to, @dirs[:real_dups_dir])
-        cmds << %Q(move "#{from}" "#{to}")
-        cmds << ''
-        cmds
+        cmds << %(move "#{from}" "#{to}")
       end
+      cmds << ''
+      cmds
     end
 
     def mkdir_win_cmds(dir, real_dir)
       cmds = []
-      relative = dir.gsub(real_dir, '').split('\\')[1..-1]
+      relative = dir.gsub(real_dir, '').split('\\')[1..]
       path = real_dir
       relative.each do |dir|
         path = File.join(path, dir).gsub('/', '\\')
-        cmds << %Q(if not exist "#{path}" mkdir "#{path}")
+        cmds << %(if not exist "#{path}" mkdir "#{path}")
       end
       cmds
     end
@@ -92,7 +89,7 @@ class ToCmds
 
       path = path.to_s
       if @dirs[:new_dir] && @dirs[:real_new_dir] && @dirs[:new_dir] != @dirs[:real_new_dir]
-        path = path.gsub(%r{\A#{@dirs[:new_dir]}}, @dirs[:real_new_dir])
+        path = path.gsub(/\A#{@dirs[:new_dir]}/, @dirs[:real_new_dir])
         is_changed = true
       end
 

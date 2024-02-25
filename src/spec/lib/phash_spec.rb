@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require './lib/phash'
 
@@ -11,7 +13,7 @@ describe PHashImage do
       phash: 10787907979500066548,
       width: 250,
       height: 250,
-      mtime: 1542905014
+      mtime: 1_542_905_014
     }
     expect(actual).to eq(expected)
   end

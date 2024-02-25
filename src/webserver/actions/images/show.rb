@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Images; end
 class Images::Show
   def call(full_path, is_large = false, cache_dir)

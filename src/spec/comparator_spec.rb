@@ -1,4 +1,6 @@
-require './cache_meta.rb'
+# frozen_string_literal: true
+
+require './cache_meta'
 require './spec/spec_helper'
 require './comparator'
 
@@ -15,7 +17,7 @@ describe Comparator do
         existing_dir: "#{@root}/existing",
         new_dir: "#{@root}/new",
         dups_dir: "#{@root}/dups",
-        data_dir: "#{@root}/data",
+        data_dir: "#{@root}/data"
       }
     )
     comparator.call
@@ -35,7 +37,7 @@ describe Comparator do
         existing_dir: "#{@root}/existing",
         new_dir: "#{@root}/new",
         dups_dir: "#{@root}/dups",
-        data_dir: "#{@root}/data",
+        data_dir: "#{@root}/data"
       }
     )
     comparator.call
@@ -43,7 +45,7 @@ describe Comparator do
   end
 
   context 'only full dups' do
-    let(:cache_dir) { './spec/fixtures/comparator/full_dups'}
+    let(:cache_dir) { './spec/fixtures/comparator/full_dups' }
 
     # файл в папке new
     # у файла не удалось получить ширину или высоту
@@ -65,7 +67,7 @@ describe Comparator do
           dups_dir: "#{@root}/dups",
           data_dir: "#{@root}/data",
           existing_meta_file: 'files_existing.json',
-          new_meta_file: 'files_new.json',
+          new_meta_file: 'files_new.json'
         }
       )
       comparator.call
@@ -78,4 +80,3 @@ describe Comparator do
     # случае нужно посчитать полный crc32
   end
 end
-

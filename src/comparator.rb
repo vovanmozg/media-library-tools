@@ -46,17 +46,17 @@ class Comparator
       actions_path: 'actions.json', # relative path from data_dir
       errors_path: 'errors.json', # relative path from data_dir
       existing_meta_file: 'files_existing.json', # relative path from data_dir
-      new_meta_file: 'files_new.json', # relative path from data_dir
+      new_meta_file: 'files_new.json' # relative path from data_dir
     }.merge(settings)
     p @settings
   end
 
   def call
-    if File.exists? @settings[:existing_meta_file]
-      existing_data = @dir_reader.read_cache(File.join(@settings[:data_dir], @settings[:existing_meta_file]))
-    else
-      existing_data = {}
-    end
+    existing_data = if File.exist? @settings[:existing_meta_file]
+                      @dir_reader.read_cache(File.join(@settings[:data_dir], @settings[:existing_meta_file]))
+                    else
+                      {}
+                    end
 
     new_data = @dir_reader.read_cache(File.join(@settings[:data_dir], @settings[:new_meta_file]))
 
@@ -102,10 +102,11 @@ class Comparator
       all_error_files += error_files
     end
 
-      # Поискать очень похожие (distance=0) файлы в папке new
+    # Поискать очень похожие (distance=0) файлы в папке new
     if @settings[:inside_new_similar]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@settings[:new_dir], @settings[:dups_dir], @errors).call(files_to_processing)
+      actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@settings[:new_dir],
+                                                                              @settings[:dups_dir], @errors).call(files_to_processing)
       all_actions.merge!(actions)
       all_error_files += error_files
     end
@@ -113,7 +114,8 @@ class Comparator
     # Поискать похожие (0 < distance < 3) файлы в папке new
     if @settings[:inside_new_doubtful]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@settings[:new_dir], @settings[:dups_dir], @errors).call(files_to_processing)
+      actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@settings[:new_dir],
+                                                                               @settings[:dups_dir], @errors).call(files_to_processing)
       all_actions.merge!(actions)
       all_error_files += error_files
     end
@@ -121,14 +123,18 @@ class Comparator
     # Обработать полные дубликаты из new, которые уже есть в existing
     if @settings[:full_dups]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files = ProcessFullDups.new(@settings[:new_dir], @settings[:existing_dir], @settings[:dups_dir], LOG).call(files_to_processing, existing_data)
+      actions, processed_new_files = ProcessFullDups.new(@settings[:new_dir], @settings[:existing_dir], @settings[:dups_dir], LOG).call(
+        files_to_processing, existing_data
+      )
       all_actions.merge!(actions)
     end
 
     if @settings[:similar]
       # Обработать файлы из new, очень похожие (hamming distance = 0) на те, которые уже есть в existing
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files = ProcessSimilar.new(@settings[:new_dir], @settings[:existing_dir], @settings[:dups_dir], LOG).call(files_to_processing, existing_data)
+      actions, = ProcessSimilar.new(@settings[:new_dir], @settings[:existing_dir], @settings[:dups_dir], LOG).call(
+        files_to_processing, existing_data
+      )
       all_actions.merge!(actions)
     end
 

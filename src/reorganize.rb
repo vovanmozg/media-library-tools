@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Сканирует папку с уже существующими файлами
 # Сканирует папку с новыми файлами
 # Создает bash-файл на перемещение файлов
@@ -36,7 +38,7 @@ require './lib/reorganize/to_json_cmds'
 FM = FileMagic.new
 
 class Reorganizer
-  def initialize(dirs, use_cache: false, system:, settings: {})
+  def initialize(dirs, system:, use_cache: false, settings: {})
     @dirs = dirs
     @dirs[:real_existing_dir] ||= dirs[:existing_dir]
     @dirs[:real_new_dir] ||= dirs[:new_dir]
@@ -68,11 +70,11 @@ class Reorganizer
     actions, errors = find_dups(existing_data, new_data)
     ToCmdsJson.new(dirs: @dirs, system: @system).process(
       actions_groups: actions,
-      errors: errors
+      errors:
     )
     cmds += ToCmds.new(dirs: @dirs, system: @system).process(
       actions_groups: actions,
-      errors: errors
+      errors:
     )
 
     write_actions_file(actions)
@@ -137,10 +139,11 @@ class Reorganizer
       all_error_files += error_files
     end
 
-      # Поискать очень похожие (distance=0) файлы в папке new
+    # Поискать очень похожие (distance=0) файлы в папке new
     if @settings[:inside_new_similar]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
+      actions, processed_new_files, error_files = ProcessInsideNewSimilar.new(@dirs[:new_dir], @dirs[:dups_dir],
+                                                                              @errors).call(files_to_processing)
       all_actions.merge!(actions)
       all_error_files += error_files
     end
@@ -148,7 +151,8 @@ class Reorganizer
     # Поискать похожие (0 < distance < 3) файлы в папке new
     if @settings[:inside_new_doubtful]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@dirs[:new_dir], @dirs[:dups_dir], @errors).call(files_to_processing)
+      actions, processed_new_files, error_files = ProcessInsideNewDoubtful.new(@dirs[:new_dir], @dirs[:dups_dir],
+                                                                               @errors).call(files_to_processing)
       all_actions.merge!(actions)
       all_error_files += error_files
     end
@@ -156,14 +160,18 @@ class Reorganizer
     # Обработать полные дубликаты из new, которые уже есть в existing
     if @settings[:full_dups]
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files = ProcessFullDups.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
+      actions, processed_new_files = ProcessFullDups.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(
+        files_to_processing, existing_data
+      )
       all_actions.merge!(actions)
     end
 
     if @settings[:similar]
       # Обработать файлы из new, очень похожие (hamming distance = 0) на те, которые уже есть в existing
       files_to_processing = files_to_processing.except(*processed_new_files)
-      actions, processed_new_files = ProcessSimilar.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(files_to_processing, existing_data)
+      actions, = ProcessSimilar.new(@dirs[:new_dir], @dirs[:existing_dir], @dirs[:dups_dir], LOG).call(
+        files_to_processing, existing_data
+      )
       all_actions.merge!(actions)
     end
 
@@ -183,10 +191,10 @@ class Reorganizer
   end
 
   def parse_existing_files(cache: false)
-    @dir_reader.parse_files(dir: @dirs[:existing_dir], type: :existing, data_dir: @dirs[:data_dir], cache: cache)
+    @dir_reader.parse_files(dir: @dirs[:existing_dir], type: :existing, data_dir: @dirs[:data_dir], cache:)
   end
 
   def parse_new_files(cache: false)
-    @dir_reader.parse_files(dir: @dirs[:new_dir], type: :new, data_dir: @dirs[:data_dir], cache: cache)
+    @dir_reader.parse_files(dir: @dirs[:new_dir], type: :new, data_dir: @dirs[:data_dir], cache:)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/media'
 require './lib/reorganize/to_cmds/base'
 require './lib/reorganize/to_cmds/skipped'
@@ -8,7 +10,7 @@ require './lib/reorganize/to_cmds/new_full_dups'
 require './lib/reorganize/to_cmds/new_similar'
 
 class XToCmds
-  PATH_REPLACING_DIRS = [:existing_dir, :new_dir, :dups_dir]
+  PATH_REPLACING_DIRS = %i[existing_dir new_dir dups_dir].freeze
 
   def initialize(settings)
     @settings = settings
@@ -27,7 +29,7 @@ class XToCmds
     cmds << "#{comment}   Files in new similar to existing: #{actions_groups[:new_similar]&.size || 0}"
     cmds << "#{comment}   Broken files: #{actions_groups[:skipped]&.size || 0}"
     cmds << "#{comment}   total: #{actions_groups.values.flatten.size || 0}"
-    cmds << "#{comment}"
+    cmds << comment.to_s
 
     actions_groups.each do |type, actions|
       name = "ToCmds::#{type.to_s.split('_').map(&:capitalize).join('')}"
@@ -39,7 +41,7 @@ class XToCmds
   end
 
   def comment
-    raise "Not implemented"
+    raise 'Not implemented'
     # @settings[:system] == :linux ? '#' : '::'
   end
 
@@ -51,5 +53,4 @@ class XToCmds
       raise "Dir #{dir2} contains #{dir1}" if dir2.include?(dir1)
     end
   end
-
 end

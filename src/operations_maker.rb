@@ -9,7 +9,7 @@ require './lib/media'
 # с файлами, включая реальные пути к файлам и информацию для комментариев,
 # которые сопровождают команды перемещения файлов.
 class OperationsMaker
-  PATH_REPLACING_DIRS = [:existing_dir, :new_dir, :dups_dir]
+  PATH_REPLACING_DIRS = %i[existing_dir new_dir dups_dir].freeze
 
   def initialize(settings: {})
     @settings = {
@@ -38,14 +38,20 @@ class OperationsMaker
 
   def call
     actions = JSON.parse(File.read(File.join(@settings[:data_dir], @settings[:actions_file])), symbolize_names: true)
-    errors = File.exist?(File.join(@settings[:data_dir], @settings[:errors_file])) ? JSON.parse(File.read(File.join(@settings[:data_dir], @settings[:errors_file])), symbolize_names: true) : []
+    errors = if File.exist?(File.join(@settings[:data_dir],
+                                      @settings[:errors_file]))
+               JSON.parse(File.read(File.join(@settings[:data_dir], @settings[:errors_file])),
+                          symbolize_names: true)
+             else
+               []
+             end
 
     cmds = process(
       actions_groups: actions,
-      errors: errors
+      errors:
     )
 
-    cmds = cmds.select { |key, values| values.size > 0 }
+    cmds = cmds.select { |_key, values| values.size.positive? }
 
     File.write(File.join(@settings[:data_dir], @settings[:operations_file]), cmds.to_json)
 
@@ -55,7 +61,7 @@ class OperationsMaker
   private
 
   def process(actions_groups:, errors: [])
-    actions_groups.each do |type, actions|
+    actions_groups.each_value do |actions|
       actions.each do |action|
         send("handle_#{action[:type]}", action)
       end
@@ -63,7 +69,10 @@ class OperationsMaker
   end
 
   def handle_move(action)
-    action[:original][:ratio] = Media.calculate_ratio(action[:original]) if action[:original][:width] && action[:original][:height]
+    if action[:original][:width] && action[:original][:height]
+      action[:original][:ratio] =
+        Media.calculate_ratio(action[:original])
+    end
     action[:original][:real_root] = normalize(action[:original][:root])
     action[:from][:ratio] = Media.calculate_ratio(action[:from]) if action[:from][:width] && action[:from][:height]
     action[:from][:real_root] = normalize(action[:from][:root])
@@ -107,7 +116,7 @@ class OperationsMaker
     real_root = replacements[root]
     return root if real_root.nil?
 
-    # TODO сделать обработку windows путей снаружи этого метода
+    # TODO: сделать обработку windows путей снаружи этого метода
     # return real_root.gsub('/', '\\') if @settings[:system] == :windows
 
     real_root

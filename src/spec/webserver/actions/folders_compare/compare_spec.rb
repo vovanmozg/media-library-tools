@@ -13,12 +13,10 @@ describe FolderCompare::Compare do
         full_dups: true,
         similar: true,
         existing_meta_file: '/vt/existing_files.json',
-        new_meta_file: '/vt/new_files.json',
+        new_meta_file: '/vt/new_files.json'
       }
     ).call
 
     p result
-
-
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './lib/mover/short_meta'
 
 class Mover

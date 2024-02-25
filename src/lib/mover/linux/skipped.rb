@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 
 class ToCmds
   class Skipped < Base
@@ -12,13 +13,13 @@ class ToCmds
       if @system == :linux
         cmds << "# #{from}, wrong length: #{action[:file_info][:size]}"
         dir_to = normalize(File.dirname(to))
-        cmds << %Q(mkdir -p "#{dir_to}")
-        cmds << %Q(mv "#{from}" "#{to}")
+        cmds << %(mkdir -p "#{dir_to}")
+        cmds << %(mv "#{from}" "#{to}")
       else
         cmds << ":: #{from}, wrong length: #{action[:file_info][:size]}"
         dir_to = normalize(File.dirname(to))
         cmds += mkdir_win_cmds(dir_to, @dirs[:real_dups_dir])
-        cmds << %Q(move '#{from}' "#{to}")
+        cmds << %(move '#{from}' "#{to}")
       end
       cmds << ''
       cmds
@@ -31,13 +32,13 @@ class ToCmds
       if @system == :linux
         cmds << "# #{from}, wrong dimensions: #{action[:file_info][:width]}x#{action[:file_info][:height]}"
         dir_to = normalize(File.dirname(to))
-        cmds << %Q(mkdir -p "#{dir_to}")
-        cmds << %Q(mv "#{from}" "#{to}")
+        cmds << %(mkdir -p "#{dir_to}")
+        cmds << %(mv "#{from}" "#{to}")
       else
         cmds << ":: #{from}, wrong dimensions: #{action[:file_info][:width]}x#{action[:file_info][:height]}"
         dir_to = normalize(File.dirname(action[:to]))
         cmds += mkdir_win_cmds(dir_to, @dirs[:real_dups_dir])
-        cmds << %Q(move "#{from}" "#{to}")
+        cmds << %(move "#{from}" "#{to}")
       end
       cmds << ''
       cmds

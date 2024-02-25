@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require './lib/utils'
 require './lib/log'
@@ -27,9 +29,7 @@ class Cache
     write_cache(file_name, key, file_info)
 
     # TODO: обратить внимание, почему проверка происходит здесь.
-    unless file_info[:phash]
-      LOG.error("Invalid phash for #{file_name}".red)
-    end
+    LOG.error("Invalid phash for #{file_name}".red) unless file_info[:phash]
 
     file_info
   end

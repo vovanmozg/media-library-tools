@@ -1,4 +1,6 @@
-require './cache_meta.rb'
+# frozen_string_literal: true
+
+require './cache_meta'
 
 require './spec/spec_helper'
 require './comparator'
@@ -63,22 +65,21 @@ describe 'Complex' do
         settings: {
           data_dir: cache_dir,
           existing_dir: "#{@root}/existing",
-          real_existing_dir: "REAL/existing",
+          real_existing_dir: 'REAL/existing',
           new_dir: "#{@root}/new",
-          real_new_dir: "REAL/new",
+          real_new_dir: 'REAL/new',
           dups_dir: "#{@root}/dups",
-          real_dups_dir: "REAL/dups"
+          real_dups_dir: 'REAL/dups'
         }
       ).call
       expect(jf('/data/operations.json', @root)).to eq(jf('./spec/fixtures/complex/operations.json'))
 
-
       # Generate bahs-file to move files
       mover = Mover.new(settings: {
-        data_dir: cache_dir,
-        operations_file: 'operations.json',
-        driver_type: :linux
-      })
+                          data_dir: cache_dir,
+                          operations_file: 'operations.json',
+                          driver_type: :linux
+                        })
 
       actual = mover.call.join("\n")
       expected = File.read('./spec/fixtures/complex/commands.sh.txt')
@@ -87,4 +88,3 @@ describe 'Complex' do
     end
   end
 end
-

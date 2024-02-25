@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class BatchMove
   OPERATION_MAP = {
     'orig-remove-dup-skip' => { original: 'removed' },
@@ -7,8 +9,8 @@ class BatchMove
     'orig-nofoto-dup-remove' => { original: 'new-nofoto', dup: 'removed' },
     'orig-other-dup-remove' => { original: 'new-other', dup: 'removed' },
     'orig-alien-dup-remove' => { original: 'new-alien', dup: 'removed' },
-    'orig-skip-dup-skip' => { }
-  }
+    'orig-skip-dup-skip' => {}
+  }.freeze
 
   def call(moving_actions, all_actions, config)
     @config = config
@@ -26,14 +28,15 @@ class BatchMove
   private
 
   def operation_types
-    OPERATION_MAP.values.map { |v| v.values }.flatten.uniq
+    OPERATION_MAP.values.map(&:values).flatten.uniq
   end
 
   def prepare_operations(action, item)
     operations = []
 
     if OPERATION_MAP[action][:original]
-      operations << { source: item['original']['full_path'], action: 'original', destination: OPERATION_MAP[action][:original] }
+      operations << { source: item['original']['full_path'], action: 'original',
+                      destination: OPERATION_MAP[action][:original] }
     end
 
     if OPERATION_MAP[action][:dup]
@@ -76,7 +79,7 @@ class BatchMove
   end
 
   def find_item_by_to(data, to)
-    data.each do |key, value|
+    data.each_value do |value|
       value.each do |item|
         return item if item['to'] == to
       end

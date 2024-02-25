@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'awesome_print'
 require 'filemagic'
 require 'pry-byebug'
@@ -5,7 +7,7 @@ require 'rspec'
 require 'tmpdir'
 require 'json'
 
-Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each {|f| require f}
+Dir[File.expand_path(File.join(File.dirname(__FILE__), 'support', '**', '*.rb'))].each { |f| require f }
 
 RSpec.configure do |config|
   config.around do |ex|

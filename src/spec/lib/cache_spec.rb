@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require './lib/cache'
 
@@ -17,7 +19,7 @@ describe Cache do
       message: "Undefined type of #{file_name}"
     }
 
-    data = described_class.new(cache_dir).read_with_cache(file_name, 'phash', invalidate = false) do
+    data = described_class.new(cache_dir).read_with_cache(file_name, 'phash', false) do
       expected
     end
 

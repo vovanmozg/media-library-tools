@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 class ProcessInsideNewDoubtful
   class Base
-
     private
 
     def very_different?(distance)

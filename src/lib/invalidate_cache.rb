@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InvalidateCache
   ATTRIBUTES = {
     image: %i[id height mtime name partial_md5 phash size type width],

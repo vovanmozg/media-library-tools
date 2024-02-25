@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fastimage'
 require 'fileutils'
 require 'chunky_png'
@@ -74,7 +76,7 @@ end
 class PHashVideo
   def get_file_info(video_path)
     # Directory to store the frames.
-    frames_dir = "/tmp/frames"
+    frames_dir = '/tmp/frames'
 
     # Create the frames directory if it doesn't exist.
     FileUtils.mkdir_p(frames_dir)
@@ -83,7 +85,7 @@ class PHashVideo
     # ffmpeg to determine how many frames to extract per second of video.
     frames_for_extraction = 10
     video_length = extract_video_length(video_path)
-    fps = "1/#{video_length/frames_for_extraction}"
+    fps = "1/#{video_length / frames_for_extraction}"
 
     # puts "video_length: #{video_length}, fps: #{fps}".green
 
@@ -125,9 +127,10 @@ class PHashVideo
     # -show_format -show_streams: What information to show - format shows overall
     #  information about the media file, and streams shows information about each
     #  stream (video, audio, etc.) in the file.
-    ffprobe_video_info = JSON.parse(`ffprobe -v quiet -print_format json -show_format -show_streams "#{video_path}"`, symbolize_names: true)
+    ffprobe_video_info = JSON.parse(`ffprobe -v quiet -print_format json -show_format -show_streams "#{video_path}"`,
+                                    symbolize_names: true)
 
-    video_info = {
+    {
       type: 'video',
       video_length: video_length,
       phash: phash,
@@ -139,8 +142,6 @@ class PHashVideo
     # puts ffprobe_video_info
     # puts video_info
     # puts "#{video_info[:phash]}|#{video_info[:video_length]}"
-
-    video_info
   end
 
   def files_to_join(frames_dir)
@@ -148,7 +149,7 @@ class PHashVideo
   end
 
   def check_frames!(frames_dir)
-    frames_exist = files_to_join(frames_dir).all? { |f| File.exist?(f)}
+    frames_exist = files_to_join(frames_dir).all? { |f| File.exist?(f) }
     raise FramesExtractionError unless frames_exist
   end
 
@@ -184,5 +185,3 @@ class PHashVideo
   #   image.save('/tmp/output.png')
   # end
 end
-
-

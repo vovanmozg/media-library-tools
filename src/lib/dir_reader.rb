@@ -31,9 +31,7 @@ class DirReader
       data = parse_files_without_cache(dir: dir, data_dir: data_dir, validate: true)
     end
 
-    if data && invalidate_cache
-      write_cache(cache_file, data)
-    end
+    write_cache(cache_file, data) if data && invalidate_cache
 
     data.tap { |data| validate_values!(data) }
   end
@@ -70,7 +68,7 @@ class DirReader
     Find.find(dir_name) do |path|
       next unless File.file?(path)
 
-      ext = File.extname(path)[1..-1]
+      ext = File.extname(path)[1..]
       files << path if allow[ext]
     end
 
@@ -78,11 +76,10 @@ class DirReader
 
     files.each do |full_path|
       @log.debug("Processing #{full_path}")
-      relative_path = full_path[dir_name.size + 1..-1]
+      relative_path = full_path[dir_name.size + 1..]
       yield full_path, dir_name, relative_path
     end
   end
-
 
   # @return [Hash] key - full path to file, value - hash with file info
   #
@@ -154,9 +151,7 @@ class DirReader
   def validate_values!(data)
     data.each_value do |file_info|
       missing = InvalidateCache.new.find_missing_attributes(file_info, file_info[:type])
-      unless missing.empty?
-        raise "Missing attributes #{missing}"
-      end
+      raise "Missing attributes #{missing}" unless missing.empty?
     end
   end
 end

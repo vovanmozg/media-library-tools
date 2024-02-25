@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # require './spec/spec_helper'
 # require './lib/reorganize/to_json_cmds'
 #

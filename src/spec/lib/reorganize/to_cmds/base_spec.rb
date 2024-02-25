@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
-#require './lib/reorganize/to_cmds'
+# require './lib/reorganize/to_cmds'
 
 describe 'ToCmds::Base' do
   xit 'composes create directory commands' do

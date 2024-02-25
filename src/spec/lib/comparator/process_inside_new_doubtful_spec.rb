@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require './spec/spec_helper'
 require './lib/comparator/process_inside_new_doubtful'
 require './lib/log'
@@ -61,13 +63,13 @@ describe ProcessInsideNewDoubtful do
           type: 'move',
           original: image1.merge(relative_path: 'x/1.jpg'),
           from: image2.merge(relative_path: 'x/2.jpg'),
-          to: { root: '/dups', relative_path: 'new_inside_doubtful/x/2.jpg' },
+          to: { root: '/dups', relative_path: 'new_inside_doubtful/x/2.jpg' }
         },
         {
           type: 'move',
           original: image1.merge(relative_path: 'x/1.jpg'),
           from: image3.merge(relative_path: 'x/3.jpg'),
-          to: { root: '/dups', relative_path: 'new_inside_doubtful/x/3.jpg' },
+          to: { root: '/dups', relative_path: 'new_inside_doubtful/x/3.jpg' }
         }
       ]
     }
@@ -136,7 +138,7 @@ describe ProcessInsideNewDoubtful do
         type: 'move',
         original: video1.merge(relative_path: 'x/1.mp4'),
         from: video2.merge(relative_path: 'x/2.mp4'),
-        to: { root: '/dups', relative_path: 'new_inside_doubtful/x/2.mp4' },
+        to: { root: '/dups', relative_path: 'new_inside_doubtful/x/2.mp4' }
       ]
     }
 
@@ -163,7 +165,7 @@ describe ProcessInsideNewDoubtful do
         type: 'move',
         from: video1.merge(relative_path: 'x/1.mp4'),
         to: { root: '/dups', relative_path: 'new_inside_doubtful/x/1.mp4' },
-        original: video2.merge(relative_path: 'x/2.mp4'),
+        original: video2.merge(relative_path: 'x/2.mp4')
       ]
     }
 
