@@ -2,4 +2,4 @@
 
 require './cache_meta'
 
-CacheMeta.new('/vt/media', '/vt/cache').call(invalidate: :errors)
+CacheMeta.new('/vt/media', '/vt/cache/cache.db').call(invalidate: :errors)
