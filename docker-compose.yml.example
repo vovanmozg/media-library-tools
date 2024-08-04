@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  media_tools_server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: vovan/media_tools
+    command: "./server.sh"
+    container_name: media_tools
+    user: "${UID}:${UID}"
+    ports:
+      - "4567:4567"
+      - "1234:1234"
+      - "26166:26148"
+    volumes:
+      - ./src:/app
+      - ${MEDIA_DIR}:/vt/media
+      - ${MEDIA_DIR}/data:/vt/data
+      - ${MEDIA_DIR}/dups:/vt/dups
+    environment:
+      - LOG_LEVEL="Logger::DEBUG"
+
+

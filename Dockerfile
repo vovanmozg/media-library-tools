@@ -13,6 +13,7 @@ RUN gem install activesupport \
     chunky_png \
     colored \
     exif \
+#    debase \
     fastimage \
     highline \
     pry-byebug \
@@ -23,6 +24,7 @@ RUN gem install activesupport \
     rmagick \
     rspec \
     ruby-filemagic \
+#    ruby-debug-ide \
     russian \
     sinatra \
     streamio-ffmpeg \

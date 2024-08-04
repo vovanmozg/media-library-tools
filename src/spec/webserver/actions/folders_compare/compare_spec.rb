@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'spec_helper'
 require './webserver/actions/folder_compare/compare'
 
 describe FolderCompare::Compare do
@@ -12,8 +13,10 @@ describe FolderCompare::Compare do
         inside_new_doubtful: true,
         full_dups: true,
         similar: true,
-        existing_meta_file: '/vt/existing_files.json',
-        new_meta_file: '/vt/new_files.json'
+        # existing_meta_file: '/vt/existing_files.json',
+        # new_meta_file: '/vt/new_files.json',
+        data_dir: "#{@root}/data",
+        data_dir: "#{@root}/data",
       }
     ).call
 

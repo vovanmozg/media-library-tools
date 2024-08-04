@@ -11,6 +11,14 @@ require_relative 'mover/linux/inside_new_similar'
 require_relative 'mover/linux/full_dups'
 require_relative 'mover/linux/similar'
 
+# settings description
+# operations_file: filename of file with operations (usually move)
+# commands_file: filename of destination file with commands (usually move)
+# data_dir: root directory (used to make full filenames)
+# driver_type: way to move files
+#   linux - generate .sh file
+#   windows - generate .bat file
+#   immediately - move files immediately with ruby
 class Mover
   PATH_REPLACING_DIRS = %i[existing_dir new_dir dups_dir].freeze
 

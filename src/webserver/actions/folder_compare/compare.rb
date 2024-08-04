@@ -7,7 +7,6 @@ require './meta_reader'
 require './comparator'
 
 class InvalidParamsError < StandardError; end
-class FolderCompare; end
 
 class FolderCompare
   class Compare
@@ -110,11 +109,12 @@ class FolderCompare
 
     def move
       # Generate bahs-file to move files
-      mover = Mover.new(settings: {
-                          operations_file: "operations_#{@suffix}.json",
-                          commands_file: "commands_#{@suffix}.sh.txt",
-                          driver_type: :linux
-                        })
+      mover = Mover.new(
+        settings: {
+          operations_file: "operations_#{@suffix}.json",
+          commands_file: "commands_#{@suffix}.sh.txt",
+          driver_type: :linux
+        })
 
       mover.call
     end
