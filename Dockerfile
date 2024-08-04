@@ -27,8 +27,11 @@ RUN gem install activesupport \
 #    ruby-debug-ide \
     russian \
     sinatra \
+    sqlite3 \
     streamio-ffmpeg \
     string_to_id
+RUN gem install bundler -v '1.17.3'
+
 
 
 WORKDIR /app

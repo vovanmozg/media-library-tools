@@ -4,7 +4,7 @@ require 'json'
 require './lib/utils'
 require './lib/log'
 
-class Cache
+class CacheFiles
   def initialize(cache_dir)
     @cache_dir = cache_dir
   end
