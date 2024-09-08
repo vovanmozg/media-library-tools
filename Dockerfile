@@ -43,6 +43,10 @@ RUN useradd --no-log-init --uid 1000 appuser
 RUN chown -R appuser:appuser /app
 
 RUN mkdir -p /vt
+RUN mkdir -p /vt/data
+RUN mkdir -p /vt/dups
+RUN mkdir -p /vt/media
+
 RUN chown -R appuser:appuser /vt
 
 CMD ["./info.sh"]

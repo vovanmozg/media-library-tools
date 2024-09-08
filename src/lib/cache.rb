@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'json'
 require 'sqlite3'
 require './lib/utils'
 require './lib/log'
@@ -8,6 +7,7 @@ require './lib/log'
 class Cache
   def initialize(db_path)
     @db = SQLite3::Database.new(db_path)
+    @db.results_as_hash = true
     create_table
   end
 
@@ -23,7 +23,6 @@ class Cache
     file_info.merge!(id_data)
     write_cache(file_name, key, file_info)
 
-    # TODO: обратить внимание, почему проверка происходит здесь.
     LOG.error("Invalid phash for #{file_name}".red) unless file_info[:phash]
 
     file_info
@@ -35,8 +34,24 @@ class Cache
     id_data = file_id(file_name, format: :json)
     cache_key = get_cache_key(id_data[:id], key)
 
-    data_to_save = data.to_json
-    @db.execute("INSERT OR REPLACE INTO cache (key, data) VALUES (?, ?)", [cache_key, data_to_save])
+    query = <<~SQL
+      INSERT OR REPLACE INTO cache (
+        key, mtime, size, name, phash, type, width, height, additional_data
+      ) VALUES (
+        :key, :mtime, :size, :name, :phash, :type, :width, :height, :additional_data
+      )
+    SQL
+    @db.execute(query, {
+                  key: cache_key,
+                  mtime: data[:mtime],
+                  size: data[:size],
+                  name: data[:name],
+                  phash: data[:phash].to_s,
+                  type: data[:type],
+                  width: data[:width],
+                  height: data[:height],
+                  additional_data: data.to_json
+                })
   end
 
   private
@@ -44,14 +59,24 @@ class Cache
   def read_with_cache2(cache_key, invalidate)
     return nil if invalidate == :all
 
-    result = @db.get_first_value("SELECT data FROM cache WHERE key = ?", cache_key)
+    result = @db.get_first_row('SELECT * FROM cache WHERE key = ?', cache_key)
     return nil unless result
 
+    file_info = {
+      mtime: result['mtime'],
+      size: result['size'],
+      name: result['name'],
+      phash: result['phash'],
+      type: result['type'],
+      width: result['width'],
+      height: result['height']
+    }
+
     begin
-      file_info = JSON.parse(result, symbolize_names: true)
+      additional_data = JSON.parse(result['additional_data'], symbolize_names: true)
+      file_info.merge!(additional_data)
     rescue JSON::ParserError
-      LOG.error("Error parsing JSON: #{result}")
-      return nil
+      LOG.error("Error parsing JSON in additional_data: #{result['additional_data']}")
     end
 
     if invalidate == :errors && file_info[:type] == 'error'
@@ -63,9 +88,9 @@ class Cache
     file_info
   end
 
-  def get_cache_key(id, key)
+  def get_cache_key(id, _key)
     id_md5 = Digest::MD5.hexdigest(id)
-    "#{key}:#{id_md5}"
+    "#{id_md5}"
   end
 
   def file_id(file_name, format: :plain)
@@ -88,7 +113,14 @@ class Cache
     @db.execute <<-SQL
       CREATE TABLE IF NOT EXISTS cache (
         key TEXT PRIMARY KEY,
-        data TEXT NOT NULL
+        mtime INTEGER,
+        size INTEGER,
+        name TEXT,
+        phash TEXT,
+        type TEXT,
+        width INTEGER,
+        height INTEGER,
+        additional_data TEXT
       );
     SQL
   end

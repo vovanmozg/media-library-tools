@@ -11,6 +11,7 @@ class Media
   def initialize(cache_dir, log)
     @cache_dir = cache_dir
     @log = log
+    @cache = Cache.new(@cache_dir)
   end
 
   # Если в метод передан блок, то он будет вызван для каждого файла.
@@ -22,7 +23,7 @@ class Media
     info, is_cache_used = read_with_cache(file_name, invalidate_cache, type)
 
     if is_cache_used
-      InvalidateCache.new.call(info, file_name, type, @cache_dir, @log)
+      InvalidateCache.new.call(info, file_name, type, nil, @cache, @log)
       yield :files_from_cache if block_given?
     else
       @log.debug('Not in cache')
@@ -80,7 +81,7 @@ class Media
 
   def read_with_cache(file_name, invalidate_cache, type)
     is_cache_used = 1
-    info = Cache.new(@cache_dir).read_with_cache(file_name, 'phash', invalidate_cache) do
+    info = @cache.read_with_cache(file_name, 'phash', invalidate_cache) do
       is_cache_used = 0
 
       if type == 'error'

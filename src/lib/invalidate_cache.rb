@@ -6,9 +6,16 @@ class InvalidateCache
     video: %i[height id mtime name partial_md5 phash size type video_length width]
   }.freeze
 
-  def call(info, file_name, type, cache_dir, log)
+  def call(info, file_name, type, cache_dir = nil, cache = nil, log)
     @log = log
-    @cache = Cache.new(cache_dir)
+    if cache_dir && !cache
+
+      @cache = Cache.new(cache_dir)
+    elsif !cache_dir && cache
+      @cache = cache
+    else
+      raise 'Either cache_dir or cache must be provided'
+    end
 
     missing_attributes = find_missing_attributes(info, type)
     update_file_info(missing_attributes, info, file_name, type) unless missing_attributes.empty?

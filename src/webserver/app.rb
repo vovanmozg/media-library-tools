@@ -17,6 +17,7 @@ require './webserver/actions/sort/index'
 require './webserver/actions/sort/move'
 require './webserver/actions/phashes/index'
 require './webserver/actions/phashes/collect'
+require './webserver/actions/cache_meta/reindex'
 require './lib/directory_options_builder'
 
 # Глобальные переменные
@@ -156,6 +157,14 @@ class MyApp < Sinatra::Base
     content_type :json
     base_path = params['path'] || DOCKER_PATH_PREFIX
     DirectoryOptionsBuilder.new.call(base_path).to_json
+  end
+
+  get '/cache-meta' do
+    erb :'cache_meta/show'
+  end
+
+  post '/cache-meta' do
+    CacheMetaAction::Reindex.new(media_dir: '/vt/media', db_file: '/vt/data/files_info.db').call
   end
 
   def list_directory_contents(path)
