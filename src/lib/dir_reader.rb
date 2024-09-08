@@ -9,6 +9,7 @@ require './lib/utils'
 # @dir_reader.scan_files(@media_dir) { |file_name| ... }
 class DirReader
   def initialize(log:)
+    # TODO: make logger singleton
     @log = log
   end
 
@@ -23,7 +24,6 @@ class DirReader
     raise 'data_dir is undefined' if data_dir.nil?
 
     cache_file = cache_file_name(data_dir, meta_path)
-
     if cache && File.exist?(cache_file)
       data = read_cache(cache_file)
       counters.increase(:from_cache)
@@ -39,15 +39,15 @@ class DirReader
   def parse_files_without_cache(dir:, data_dir:, validate: true)
     raise 'data_dir is undefined' if data_dir.nil?
 
-    media = Media.new(data_dir, @log)
     fm = FileMagic.new
+    media = Media.new(file_magic: fm)
 
     data = {}
     scan_files(dir) do |full_path, root_path, relative_path|
       # TODO: progress bar
       print '.' if @log.level == Logger::INFO
 
-      file_info = media.read_file!(full_path, fm)
+      file_info = media.read_file!(file_name: full_path)
       if file_info
         data[relative_path] = file_info
         data[relative_path][:root] = root_path
@@ -91,7 +91,7 @@ class DirReader
   #     "phash": 15591569520836312423,
   #     "width": 400,
   #     "height": 400,
-  #     "partial_md5": "100eaca7339bfbabbf3b9e4b1e51542a",
+  #     "md5": "100eaca7339bfbabbf3b9e4b1e51542a",
   #     "size": 7406817,
   #     "name": "20181201-WA0007.mp4",
   #     "id": "100eaca7339bfbabbf3b9e4b1e51542a 7406817 20181201-WA0007.mp4"

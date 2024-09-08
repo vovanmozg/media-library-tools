@@ -48,11 +48,10 @@ class Comparator
       existing_meta_file: 'files_existing.json', # relative path from data_dir
       new_meta_file: 'files_new.json' # relative path from data_dir
     }.merge(settings)
-    p @settings
   end
 
   def call
-    existing_data = if File.exist? @settings[:existing_meta_file]
+    existing_data = if File.exist?(File.join(@settings[:data_dir], @settings[:existing_meta_file]))
                       @dir_reader.read_cache(File.join(@settings[:data_dir], @settings[:existing_meta_file]))
                     else
                       {}
@@ -91,6 +90,7 @@ class Comparator
     skipped_files, actions = processor.call(files_to_processing)
     all_actions.merge!(actions) if @settings[:show_skipped]
 
+    binding.pry
     # Проверить, нет ли идентичных дубликатов в папке new (по частичному md5)
     # TODO: Возможно найденные на этом этапе файлы стоит дополнительно сравнить
     #  побайтово

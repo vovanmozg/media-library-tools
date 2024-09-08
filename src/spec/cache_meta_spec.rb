@@ -16,13 +16,9 @@ describe CacheMeta do
     FileUtils.touch("#{@root}/new/1.jpg", mtime: 1_600_000_000)
 
     CacheMeta.new(media_dir, cache_dir).call
-    cache_files = Dir.glob("#{cache_dir}/**/*.json")
-    expected = [
-      "#{cache_dir}/phash/4f/4fa07c3b7dd592da690622e66d782368.json",
-      "#{cache_dir}/phash/84/84c123ac6279034cb1131ef78bc37c59.json",
-      "#{cache_dir}/phash/fc/fc240acdbd27652f831fb3ce6bf00925.json"
-      # "#{cache_dir}/progress.json"
-    ]
-    expect(cache_files).to eq(expected)
+
+    cached_keys = ModelCache.all.map(&:key)
+    expected = %w[84c123ac6279034cb1131ef78bc37c59 fc240acdbd27652f831fb3ce6bf00925 4fa07c3b7dd592da690622e66d782368]
+    expect(cached_keys).to eq(expected)
   end
 end

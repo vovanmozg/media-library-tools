@@ -35,7 +35,7 @@ class ProcessInsideNewFullDups
   # }
   #
   def dups_groups(data)
-    by_md5 = data.group_by { |_, file_info| file_info[:partial_md5] }
+    by_md5 = data.group_by { |_, file_info| file_info[:md5] }
     error_files = []
     new_inside_full_dups = {}
 
@@ -110,6 +110,6 @@ class ProcessInsideNewFullDups
       }
     end
 
-    { inside_new_full_dups: actions }
+    {inside_new_full_dups: actions}
   end
 end

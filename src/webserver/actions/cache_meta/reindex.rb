@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require './config/constants'
-require './cache_meta'
+require './cache_meta_async'
 
 class InvalidParamsError < StandardError; end
 
@@ -13,7 +13,7 @@ class CacheMetaAction
     end
 
     def call
-      CacheMeta.new(@media_dir, @db_file).call(invalidate: :errors)
+      CacheMetaAsync.new(@media_dir).call
     end
   end
 end

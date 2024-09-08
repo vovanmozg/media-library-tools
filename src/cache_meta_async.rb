@@ -13,29 +13,19 @@ require './lib/scan_files'
 require './lib/log'
 require './lib/media'
 require './lib/dir_reader'
+require './webserver/workers/phash_worker'
 
-class CacheMeta
-  def initialize(media_dir, data_dir)
-    raise if media_dir.nil? || media_dir.empty? || data_dir.nil? || data_dir.empty?
+class CacheMetaAsync
+  def initialize(media_dir)
+    raise if media_dir.nil? || media_dir.empty?
 
     @media_dir = media_dir
-    @data_dir = data_dir
-    @media = Media.new
     @dir_reader = DirReader.new(log: LOG)
   end
 
-  def call(invalidate: false)
-    @invalidate = invalidate
-    counters = Counters.new(:all, @data_dir)
+  def call
     @dir_reader.scan_files(@media_dir) do |file_name|
-      print '.' if LOG.level == Logger::INFO
-      update_cache(file_name) do |event|
-        counters.increase(event)
-      end
+      PhashWorker.perform_async(file_name)
     end
-  end
-
-  def update_cache(file_name, &block)
-    @media.read_file!(file_name: file_name, invalidate_cache: @invalidate, &block)
   end
 end

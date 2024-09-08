@@ -58,7 +58,7 @@ class Md5
   def call
     hash = {}
     scan_files(@media_dir) do |file_name|
-      md5 = calculate_partial_md5(file_name)
+      md5 = calculate_md5(file_name)
       name = File.basename(file_name)
       size = File.size(file_name).to_s
       hash = Digest::MD5.hexdigest("#{md5} #{name} #{size}")
@@ -68,7 +68,7 @@ class Md5
     end
   end
 
-  def calculate_partial_md5(filename)
+  def calculate_md5(filename)
     chunk = IO.read(filename, 16_384)
     raise FileReadingError if chunk.nil?
 

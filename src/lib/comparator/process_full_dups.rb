@@ -13,7 +13,7 @@ class ProcessFullDups
     full_dups = compare(new_data, existing_by_md5)
     actions = generate_actions(full_dups, existing_by_md5)
     [
-      { full_dups: actions },
+      {full_dups: actions},
       full_dups.keys
     ]
   end
@@ -24,7 +24,7 @@ class ProcessFullDups
 
     full_dups.each do |relative_path, file_info|
       relative_path = relative_path.to_s
-      original_file = existing_by_md5[file_info[:partial_md5]].keys.first
+      original_file = existing_by_md5[file_info[:md5]].keys.first
       actions << {
         type: 'move',
         from: file_info.merge(
@@ -34,7 +34,7 @@ class ProcessFullDups
           root: @dups_dir,
           relative_path: File.join('full_dups', relative_path)
         },
-        original: existing_by_md5[file_info[:partial_md5]][original_file].merge(
+        original: existing_by_md5[file_info[:md5]][original_file].merge(
           relative_path: original_file.to_s
         )
       }
@@ -52,7 +52,7 @@ class ProcessFullDups
   #
   # @param existing_data [Hash] The existing data.
   # Each key is a string representing the file path.
-  # Each value is a hash with information about the file. It should at least include :type and :partial_md5 keys.
+  # Each value is a hash with information about the file. It should at least include :type and :md5 keys.
   #
   # @example
   #   existing_data = {
@@ -71,11 +71,11 @@ class ProcessFullDups
   # @return [Hash] A new hash, where each key is an MD5 hash and each value is a hash mapping file paths to their data.
   def group_by_md5(existing_data)
     existing_by_md5 = Hash.new { |h, k| h[k] = {} }
-
     existing_data.each do |existing_file, existing_file_data|
+
       next if existing_file_data[:type] == 'error'
 
-      existing_by_md5[existing_file_data[:partial_md5]][existing_file] = existing_file_data
+      existing_by_md5[existing_file_data[:md5]][existing_file] = existing_file_data
     end
 
     existing_by_md5
@@ -110,7 +110,7 @@ class ProcessFullDups
   def compare(new_data, existing_by_md5)
     full_dups = {}
     new_data.each do |new_file, new_file_info|
-      full_dups[new_file] = new_file_info if existing_by_md5.key?(new_file_info[:partial_md5])
+      full_dups[new_file] = new_file_info if existing_by_md5.key?(new_file_info[:md5])
     end
     full_dups
   end

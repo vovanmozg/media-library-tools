@@ -28,8 +28,10 @@ RUN gem install activesupport \
     russian \
     sinatra \
     sqlite3 \
+    sequel \
     streamio-ffmpeg \
-    string_to_id
+    string_to_id \
+    sucker_punch
 RUN gem install bundler -v '1.17.3'
 
 

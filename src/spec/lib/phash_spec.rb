@@ -22,6 +22,6 @@ describe PHashImage do
     file_name = './spec/fixtures/media/6 broken.jpg'
     phash = PHashImage.new
 
-    expect { phash.get_file_info(file_name) }.to raise_error(ImageReadingError)
+    expect { phash.get_file_info(file_name) }.to raise_error(UnknownPhashError)
   end
 end

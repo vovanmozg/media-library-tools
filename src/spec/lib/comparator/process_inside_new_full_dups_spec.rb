@@ -12,13 +12,13 @@ describe ProcessInsideNewFullDups do
       {
         'x/1 identical.jpg' => {
           phash: 10_787_907_979_500_066_548,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           name: '1 identical.jpg',
           root: '/new'
         },
         'x/1.jpg' => {
           phash: 10_787_907_979_500_066_548,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           name: '1.jpg',
           root: '/new'
         }
@@ -50,12 +50,12 @@ describe ProcessInsideNewFullDups do
       data = {
         'x/1 identical.jpg' => {
           phash: 10_787_907_979_500_066_548,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           root: '/new'
         },
         'x/1.jpg' => {
           phash: 55_555_555_555_555_555_555,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           root: '/new'
         }
       }
@@ -70,7 +70,7 @@ describe ProcessInsideNewFullDups do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '1 identical.jpg',
       mtime: 1_600_000_000,
@@ -82,7 +82,7 @@ describe ProcessInsideNewFullDups do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '1.jpg',
       mtime: 1_600_000_000,
@@ -116,7 +116,7 @@ describe ProcessInsideNewFullDups do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '1-1.jpg',
       mtime: 1_600_000_001,
@@ -128,7 +128,7 @@ describe ProcessInsideNewFullDups do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '1-2.jpg',
       mtime: 1_600_000_000,

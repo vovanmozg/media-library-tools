@@ -13,13 +13,13 @@ describe ProcessInsideNewSimilar do
       data = {
         'x/1 identical.jpg' => {
           phash: 10_787_907_979_500_066_548,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           mtime: 1_600_000_000,
           name: '1 identical.jpg'
         },
         'x/1.jpg' => {
           phash: 10_787_907_979_500_066_548,
-          partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+          md5: '63f3c713a01010bbcafdfafa3d688566',
           mtime: 1_600_000_000,
           name: '1.jpg'
         }
@@ -42,7 +42,7 @@ describe ProcessInsideNewSimilar do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '1.jpg',
       mtime: 1_600_000_001,
@@ -53,7 +53,7 @@ describe ProcessInsideNewSimilar do
       phash: 10_787_907_979_500_066_548,
       width: 250,
       height: 250,
-      partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+      md5: '63f3c713a01010bbcafdfafa3d688566',
       size: 8359,
       name: '2.jpg',
       mtime: 1_600_000_000,
@@ -83,13 +83,13 @@ describe ProcessInsideNewSimilar do
   #   data = {
   #     '/new/1 identical.jpg' => {
   #       phash: 10787907979500066548,
-  #       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+  #       md5: '63f3c713a01010bbcafdfafa3d688566',
   #       mtime: 1_600_000_001,
   #       name: '1 identical.jpg'
   #     },
   #     '/new/1.jpg' => {
   #       phash: 10787907979500066548,
-  #       partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+  #       md5: '63f3c713a01010bbcafdfafa3d688566',
   #       mtime: 1_600_000_000,
   #       name: '1.jpg'
   #     }

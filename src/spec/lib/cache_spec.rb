@@ -13,17 +13,17 @@ describe Cache do
     FileUtils.mkdir_p(cache_dir)
 
     cache_db = File.join(cache_dir, 'cache.db')
-    cache_key = "phash:84c123ac6279034cb1131ef78bc37c59"
+    cache_key = '84c123ac6279034cb1131ef78bc37c59'
     db = SQLite3::Database.new(cache_db)
-    db.execute "CREATE TABLE IF NOT EXISTS cache (key TEXT PRIMARY KEY, data TEXT NOT NULL);"
-    db.execute("INSERT OR REPLACE INTO cache (key, data) VALUES (?, ?)", [cache_key, ''])
+    db.execute 'CREATE TABLE IF NOT EXISTS cache (key TEXT PRIMARY KEY, data TEXT NOT NULL);'
+    db.execute('INSERT OR REPLACE INTO cache (key, data) VALUES (?, ?)', [cache_key, ''])
 
     expected = {
       type: 'error',
       message: "Undefined type of #{file_name}"
     }
 
-    data = described_class.new(cache_db).read_with_cache(file_name, 'phash', false) do
+    data = described_class.new.read(file_name, 'phash', false) do
       expected
     end
 

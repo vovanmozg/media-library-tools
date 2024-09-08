@@ -6,6 +6,7 @@ require 'json'
 require 'fileutils' # для работы с файлами
 require 'rmagick'
 require 'pry-byebug'
+require 'sequel'
 
 require './webserver/actions/explorer/index'
 require './webserver/actions/folder_compare/compare'
@@ -18,7 +19,6 @@ require './webserver/actions/sort/move'
 require './webserver/actions/phashes/index'
 require './webserver/actions/phashes/collect'
 require './webserver/actions/cache_meta/reindex'
-require './lib/directory_options_builder'
 
 # Глобальные переменные
 # WIN_DIR = 'F:/media'
@@ -165,6 +165,42 @@ class MyApp < Sinatra::Base
 
   post '/cache-meta' do
     CacheMetaAction::Reindex.new(media_dir: '/vt/media', db_file: '/vt/data/files_info.db').call
+    ''
+  end
+
+  get '/job-status' do
+    @stats = SuckerPunch::Queue.stats
+    "<pre>#{JSON.pretty_generate(@stats)}</pre>"
+  end
+
+  get '/stats' do
+    DB = Sequel.connect('sqlite:///vt/data/files_info.db')
+    
+    # Get total number of records
+    record_count = DB[:cache].count
+    
+    # Get total file size
+    total_size = DB[:cache].sum(:size)
+    
+    # Convert total size to human-readable format
+    total_size_human = (total_size.to_f / (1024 * 1024 * 1024)).round(2)
+    
+    @stats = {
+      record_count: record_count,
+      total_size: "#{total_size} B (#{total_size_human} GB)",
+      db_file: '/vt/data/files_info.db',
+      root_media_dir: '/vt/media',
+      media_dir_files_count: Dir.entries('/vt/media').count,
+      media_dir_files: Dir.entries('/vt/media').join(', ').slice(0, 100),
+      data_dir: '/vt/data',
+      data_dir_files_count: Dir.entries('/vt/data').count,
+      data_dir_files: Dir.entries('/vt/data').join(', ').slice(0, 100),
+      dups_dir: '/vt/dups',
+      dups_dir_files_count: Dir.entries('/vt/dups').count,
+      dups_dir_files: Dir.entries('/vt/dups').join(', ').slice(0, 100),
+    }
+    
+    "<pre>#{JSON.pretty_generate(@stats)}</pre>"
   end
 
   def list_directory_contents(path)

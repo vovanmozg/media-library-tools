@@ -10,6 +10,9 @@ require './lib/media'
 require './lib/dir_reader'
 
 class MetaReader
+  # @param media_dir [String] путь к директории с медиафайлами
+  # @param data_dir [String] путь к директории с данными
+  # @param media_meta_path [String] путь к файлу, куда сохранить метаданные
   def initialize(settings)
     @settings = {
       media_dir: '/vt/media', # source path (inside docker) to existing media files
@@ -21,9 +24,10 @@ class MetaReader
     @data_dir = @settings[:data_dir]
     @meta_path = @settings[:media_meta_path]
 
-    raise if @media_dir.nil? || @media_dir.empty? || @data_dir.nil? || @data_dir.empty?
-
-    @media = Media.new(@data_dir, LOG)
+    raise 'media_dir is invalid' if @media_dir.nil? || @media_dir.empty?
+    raise 'data_dir is invalid' if @data_dir.nil? || @data_dir.empty?
+    
+    @media = Media.new
     @dir_reader = DirReader.new(log: LOG)
   end
 

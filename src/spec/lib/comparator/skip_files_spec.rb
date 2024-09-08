@@ -11,7 +11,7 @@ describe SkipFiles do
         phash: 10_787_907_979_500_066_548,
         width: 250,
         height: 250,
-        partial_md5: '63f3c713a01010bbcafdfafa3d688566',
+        md5: '63f3c713a01010bbcafdfafa3d688566',
         size: 8359,
         name: '1',
         id: '63f3c713a01010bbcafdfafa3d688566 8359 1'
@@ -36,8 +36,8 @@ describe SkipFiles do
     expect(skipped_files).to eq(['x/1.mp4'])
     expected = [
       {
-        from: { type: 'video', width: 250, height: 250, relative_path: 'x/1.mp4' },
-        to: { root: '/dups/new_broken', relative_path: 'x/1.mp4' },
+        from: {type: 'video', width: 250, height: 250, relative_path: 'x/1.mp4'},
+        to: {root: '/dups/new_broken', relative_path: 'x/1.mp4'},
         type: :wrong_length
       }
     ]

@@ -24,7 +24,7 @@ describe BatchMove do
             'width' => 1280,
             'height' => 835,
             'mtime' => 1_653_685_214,
-            'partial_md5' => '9ee4ef18e92784a6eb7379875158b6c7',
+            'md5' => '9ee4ef18e92784a6eb7379875158b6c7',
             'size' => 192_453,
             'name' => 'dup.jpg',
             'id' => '1653685214 192453 dup.jpg',
@@ -37,7 +37,7 @@ describe BatchMove do
             'width' => 1280,
             'height' => 835,
             'mtime' => 1_653_685_214,
-            'partial_md5' => '9ee4ef18e92784a6eb7379875158b6c7',
+            'md5' => '9ee4ef18e92784a6eb7379875158b6c7',
             'size' => 192_453,
             'name' => 'original.jpg',
             'id' => '1653685214 192453 original.jpg',
@@ -57,7 +57,7 @@ describe BatchMove do
     }
   end
 
-  let(:moving_actions) { { "#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-remove-dup-skip' } }
+  let(:moving_actions) { {"#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-remove-dup-skip'} }
 
   it 'returns error that file does not exist' do
     result = described_class.new.call(moving_actions, data, config)
@@ -86,7 +86,7 @@ describe BatchMove do
     end
 
     context 'when remove-dup' do
-      let(:moving_actions) { { "#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-skip-dup-remove' } }
+      let(:moving_actions) { {"#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-skip-dup-remove'} }
 
       it 'moves files' do
         result = described_class.new.call(moving_actions, data, config)
@@ -95,7 +95,7 @@ describe BatchMove do
     end
 
     context 'when remove-both' do
-      let(:moving_actions) { { "#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-remove-dup-remove' } }
+      let(:moving_actions) { {"#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-remove-dup-remove'} }
 
       it 'moves files' do
         result = described_class.new.call(moving_actions, data, config)
@@ -108,7 +108,7 @@ describe BatchMove do
     end
 
     context 'when archive-both' do
-      let(:moving_actions) { { "#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-archive-dup-remove' } }
+      let(:moving_actions) { {"#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-archive-dup-remove'} }
 
       it 'moves files' do
         result = described_class.new.call(moving_actions, data, config)
@@ -121,7 +121,7 @@ describe BatchMove do
     end
 
     context 'when orig-nofoto-dup-remove' do
-      let(:moving_actions) { { "#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-nofoto-dup-remove' } }
+      let(:moving_actions) { {"#{@root}/dups/new_inside_full_dups/wai/original.jpg" => 'orig-nofoto-dup-remove'} }
 
       it 'moves files' do
         result = described_class.new.call(moving_actions, data, config)

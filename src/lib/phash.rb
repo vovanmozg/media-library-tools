@@ -9,7 +9,9 @@ require 'json'
 require 'rmagick'
 
 class FramesExtractionError < StandardError; end
+
 class ImageReadingError < StandardError; end
+
 class UnknownPhashError < StandardError; end
 
 class PHashImage

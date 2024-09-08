@@ -10,17 +10,17 @@ describe ProcessFullDups do
 
   it 'returns files from new which exists in existing' do
     image1 = image(name: '1 identical.jpg', phash: 11_111_111_111_111_111_111,
-                   partial_md5: '1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f', root: '/new')
-    image2 = image(name: '2.jpg', phash: 22_222_222_222_222_222_222, partial_md5: '25252525252525252525252525252525',
+                   md5: '1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f', root: '/new')
+    image2 = image(name: '2.jpg', phash: 22_222_222_222_222_222_222, md5: '25252525252525252525252525252525',
                    root: '/new')
     new_data = {
       'x/1 identical.jpg' => image1,
       'x/2.jpg' => image2
     }
 
-    image3 = image(name: '1.jpg', phash: 11_111_111_111_111_111_111, partial_md5: '1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f',
+    image3 = image(name: '1.jpg', phash: 11_111_111_111_111_111_111, md5: '1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f',
                    root: '/existing')
-    image4 = image(name: '2.jpg', phash: 33_333_333_333_333_333_333, partial_md5: '3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f',
+    image4 = image(name: '2.jpg', phash: 33_333_333_333_333_333_333, md5: '3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f',
                    root: '/existing')
     existing_data = {
       'x/1.jpg' => image3,
@@ -32,7 +32,7 @@ describe ProcessFullDups do
         {
           type: 'move',
           from: image1.merge(relative_path: 'x/1 identical.jpg'),
-          to: { root: '/dups', relative_path: 'full_dups/x/1 identical.jpg' },
+          to: {root: '/dups', relative_path: 'full_dups/x/1 identical.jpg'},
           original: image3.merge(relative_path: 'x/1.jpg')
         }
       ]

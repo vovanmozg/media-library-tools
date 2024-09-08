@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Mover
+class Mover
   class Windows
     def self.headers(actions_groups)
       cmds = []

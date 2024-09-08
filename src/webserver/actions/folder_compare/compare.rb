@@ -8,6 +8,19 @@ require './comparator'
 
 class InvalidParamsError < StandardError; end
 
+# Ключевые параметры при использовании класса
+# steps - массив шагов, которые нужно выполнить. Возможные значения:
+#   read_meta - считать метаданные
+#   compare - сравнить
+#   make_operations - сформировать операции
+#   move - переместить
+# actions - массив типов сравнений. Возможные значения:
+#   inside_new_full_dups
+#   inside_new_similar
+#   inside_new_doubtful
+#   full_dups
+#   similar
+#
 class FolderCompare
   class Compare
     # { "dir_new" => "/vt",
@@ -31,16 +44,17 @@ class FolderCompare
       # end
     end
 
-    def process
-      puts '----------------------'
-      puts @settings
+    def new_meta_file_path
+      "files_new_#{@suffix}.json"
+    end
 
+    def process
       validate_steps
 
       @suffix = StringToId.string_to_id("#{Time.now.strftime('%Y-%m-%d_%H-%M')}_#{@settings[:new_dir]}_#{@settings[:existing_dir]}")
 
       if @settings[:steps].include?('read_meta')
-        read_meta('existing')
+        read_meta('existing') if existing_dir_used?
         read_meta('new')
       end
 
@@ -50,6 +64,10 @@ class FolderCompare
 
       # make_operations
       # move
+
+      {
+        new_meta_file: new_meta_file_path
+      }
     end
 
     private
@@ -65,7 +83,7 @@ class FolderCompare
       @settings[:steps] = @settings[:steps].map { |step| [step, true] }.to_h
 
       # Compare meta
-      Comparator.new(
+      comparator = Comparator.new(
         settings: {
           existing_dir: @settings[:existing_dir],
           new_dir: @settings[:new_dir],
@@ -76,7 +94,7 @@ class FolderCompare
           similar: @settings[:actions].include?('similar'),
           show_skipped: @settings[:actions].include?('show_skipped'),
           actions_file: "actions_#{@suffix}.json",
-          new_meta_file: "files_new_#{@suffix}.json",
+          new_meta_file: new_meta_file_path,
           existing_meta_file: "files_existing_#{@suffix}.json"
 
           #             --inside_new_full_dups=true \
@@ -89,7 +107,7 @@ class FolderCompare
           #             --actions_path=actions_$DIR.json
         }
       )
-      # comparator.call
+      comparator.call
     end
 
     def make_operations
@@ -119,21 +137,35 @@ class FolderCompare
       mover.call
     end
 
+    def existing_dir_used?
+      !!(@settings[:full_dups] || @settings[:similar])
+    end
+
     def validate_steps
       raise InvalidParamsError, "Invalid data_dir: #{@settings[:data_dir]}" unless File.directory?(@settings[:data_dir])
 
-      validate_dir(@settings[:existing_dir], :existing_dir)
+      ap @settings
+
+      if existing_dir_used?
+        validate_dir(@settings[:existing_dir], :existing_dir)
+      else
+        if @settings[:existing_dir]
+          raise InvalidParamsError, 'You should not specify existing dir if you do not use it'
+        end
+      end
       validate_dir(@settings[:new_dir], :new_dir)
 
-      if @settings[:existing_dir] == @settings[:new_dir]
+      if existing_dir_used? && @settings[:existing_dir] == @settings[:new_dir]
         raise InvalidParamsError,
               'New dir and existing dir must be different'
       end
-      if @settings[:existing_dir].include?(@settings[:new_dir])
+
+      if existing_dir_used? && @settings[:existing_dir].include?(@settings[:new_dir])
         raise InvalidParamsError,
               'New dir must not be part of existing dir'
       end
-      if @settings[:new_dir].include?(@settings[:existing_dir])
+
+      if existing_dir_used? && @settings[:new_dir].include?(@settings[:existing_dir])
         raise InvalidParamsError,
               'Existing dir must not be part of new dir'
       end
